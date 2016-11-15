@@ -1,13 +1,16 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
+const Auth0Lock = require('auth0-lock-passwordless').default;
 
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
 
+var Home = require('./components/Home');
 
 var App = require('./components/App');
+
 
 
 /*
@@ -21,7 +24,9 @@ The <User/> instance will be passed a prop called `params`. It will be an object
 var routes = (
     
     <Router history={ReactRouter.browserHistory}>
-        <Route path="/" component={App}/>
+        <Route path="/" component={App}>
+            <Route path='/' component={Home}/>
+        </Route>
     </Router>
 );
 

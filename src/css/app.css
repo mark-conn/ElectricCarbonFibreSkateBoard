@@ -13,19 +13,36 @@ h1,h2,h3,h4,h5,h6 {
     color: #fff;
     overflow: hidden;
     padding: 0.5rem;
+    display: flex;
+    justify-content: center;
 }
 
 .main-header h1 {
     line-height: 1;
     margin: 0;
     font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .main-header a {
     color: white;
     text-decoration: none;
+    justify-content: center;
 }
 
 .main-content {
     padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.login-button {
+    width: 100px;
+    height: 40px;
+}
+
+.login {
+    font-size: large
 }
