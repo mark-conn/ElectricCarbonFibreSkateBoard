@@ -3,6 +3,7 @@ const particle = new Particle();
 const wheelCircumference = 0.3;
 const battery = 10;
 
+// Switches to true when 'TRIP' mode is engaged
 var trip = false;
 
 var batteryPercent;
@@ -18,6 +19,12 @@ var powerLevel;
 var rpm;
 var tripDistance;
 var currentCap;
+var currentLocation;
+
+// trip variables
+var tripStartTime;
+var tripStartPoint;
+var tripStartingBattery;
 
 
 module.exports = function appAPI(connection) {
@@ -67,9 +74,11 @@ module.exports = function appAPI(connection) {
         
         
     },
-        
+    
+    // needs AUTH-O    
     signIn: function() {},
     
+    //works
     setPowerLevel: function(percentage) {
         
         // connect to board
@@ -112,10 +121,27 @@ module.exports = function appAPI(connection) {
         api.variableCommunicator('rpm', function(err, result){
             if(err) console.log(err);
             else {
+                
                result = result.body.result;
                speed = result * wheelCircumference;
+               
                if(trip) speedArray.push({speed: speed, time: Date.now()});
                callback(null, speed);
+            }
+        });
+        
+    },
+    
+    //works
+    getCurrentRpm: function(callback) {
+        
+        api.variableCommunicator('rpm', function(err, result){
+            if(err) console.log(err);
+            else {
+                
+                result = result.body.result;
+                callback(null, result);
+                
             }
         });
         
@@ -133,8 +159,10 @@ module.exports = function appAPI(connection) {
         api.variableCommunicator('currentCap', function(err, result){
            if(err) callback(err);
            else {
-               currentCap = result.body.result;
+               
+               currentCap = battery - result.body.result;
                batteryPercent = Math.round((1 - (currentCap/battery)) * 100);
+               
                if(trip) batteryArray.push({batteryPercent: batteryPercent, time: Date.now()});
                callback(null, batteryPercent);
            }
@@ -142,35 +170,117 @@ module.exports = function appAPI(connection) {
         
     },
     
-    tripChecker: function(distance) {
+    
+    //MAP FUNCTIONS
+    
+    googleDistanceMatrix: function(callback) {
+        
+        
+        
+    },
+    
+    //TRIP FUNCTIONS
+    
+    
+    tripChecker: function() {
         
         // current power level variable
-            // deduce RPM
-            // current draw
+            powerLevel;
         
         // distance = kms from Google 
+        
         // battery = current battery percent variable
-            // current capacity = (battery - current average draw * time)
+            batteryPercent;
         
         // distance/RPM = hours to complete trip
         // current draw * hours = capacity trip(amp/hours)
         
         // capacity trip/ current cap
             // if / else enough power, display
-            // good or bad
+            // good --> api.startTrip();
+            // bad say "try turning lights off or lower power level"
+            // 
         
     },
     
-    newTrip: function() {},
+    newTrip: function() {
+        
+        // MAP renders and destination picked
+        // MAIN renders and power level set, lights set
+        api.tripChecker();
+        // NEW TRIP button becomes START TRIP button
+        
+    },
     
-    startTrip: function() {},
+    startTrip: function() {
+        
+        // get a starting time for the trip
+        // get a starting location for the trip from Google API
+        // get a starting battery reading
+        
+        tripStartTime = Date.now();
+        
+        // use navigator.geolocation
+        // http://html5doctor.com/finding-your-position-with-geolocation/
+        tripStartPoint = '';
+        
+        tripStartingBattery = batteryPercent;
+        trip = true;
+
+        
+    },
     
-    pauseTrip: function() {},
+    pauseTrip: function() {
+        
+        // if speed has remained at 0 for X minutes, TRIP will PAUSE,
+        // engage a screen overlay with two options: END TRIP or CONTINUE
+        
+    },
     
-    endTrip: function() {},
-    
-    
+    endTrip: function() {
+        
+        var tripEndTime = Date.now();
+        
+        // location from Google API
+        var tripEndPoint = '';
+        
+        var speedArraySum = speedArray.reduce(function(a,b){
+            return a + b;
+        }, 0);
+        
+        var averageSpeed = speedArraySum / speedArray.length;
+        
+        var tripEndingBattery = batteryPercent;
+        
+        var powerUsage = tripStartingBattery - tripEndingBattery;
+        
+        // distance from Google Map API
+        var distance = '';
+        
+        connection.query(
+            `INSERT INTO trips(
+                startTime,
+                endTime,
+                startPoint,
+                endPoint,
+                averageSpeed,
+                powerUsage,
+                distance
+                ) VALUES (?,?,?,?,?,?,?,)`,
+                [tripStartTime, tripEndTime, tripStartPoint, tripEndPoint, averageSpeed, powerUsage, distance]
+            );
+            
+        speedArray.forEach(function(obj){
+            connection.query(
+                `INSERT INTO tripSpeeds(
+                    speed,
+                    time
+                    ) VALUES (?,?)`, [obj.speed, obj.time]
+                    );
+        });
+    },
     
     };
+    
     return api;
 };

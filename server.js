@@ -16,6 +16,15 @@ const api = appFunctions(connection);
 app.use(morgan('dev'));
 
 
+app.get('/rpm', function(request, response){
+    api.getCurrentRpm(function(err, result){
+        if(err) console.log(err);
+        else {
+            console.log(result);
+            response.end();
+        }
+    });
+});
 
 app.get('/batterylevel', function(request, response){
     api.getBatteryPercent(function(err, result){
