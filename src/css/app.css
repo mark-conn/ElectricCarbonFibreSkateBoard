@@ -14,7 +14,8 @@ h1,h2,h3,h4,h5,h6 {
     overflow: hidden;
     padding: 0.5rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    
 }
 
 .main-header h1 {
@@ -38,11 +39,13 @@ h1,h2,h3,h4,h5,h6 {
     justify-content: center;
 }
 
-.login-button {
-    width: 100px;
-    height: 40px;
-}
 
 .login {
     font-size: large
+}
+
+faBattery {
+    width: 50px;
+    height: 25px;
+    color: white;
 }
