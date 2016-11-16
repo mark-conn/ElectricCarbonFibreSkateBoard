@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
   database: 'ecf'
 });
 
-const appFunctions = require('./functions');
+var appFunctions = require('./api-functions');
 const api = appFunctions(connection);
 app.use(morgan('dev'));
 
@@ -69,25 +69,7 @@ app.get('/lights/:toggle', function(request, response){
     });
 });
 
-// call for a static map from google STATIC MAP API
-app.get('/map', function(request, response){
-    
-    fetch(`https://maps.googleapis.com/maps/api/staticmap?center=${request.params.currentlocation}&zoom=14&size=500x400`)
-    
-})
 
-// receive current location and trip destination variables from UI, call the google MAP MAXTRIX API, get a JSON result
-app.get('/map/:currentlocation/:tripDestination', function(request, response) {
-    
-    fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${request.params.currentlocation}&destinations=${request.params.tripdestination}&mode=bicycling&language=en&avoid=highways&key=AIzaSyAizOC5hi8Wwkxshx-0sb0TE--2VV5zKIQ`)
-    .then(function(result){
-       console.log(result);
-       
-       // how should this result be mapped?
-       // how do I push this result to UI?
-       
-    });
-});
     
 
 
