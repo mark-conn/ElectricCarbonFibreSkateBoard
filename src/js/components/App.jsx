@@ -18,7 +18,7 @@ var App = React.createClass({
             <div className="main-app">
                 <header className="main-header">
                     <h1><Link to="/">ECF Board</Link></h1>
-                    <img src="./battery_20_white_72x72.png"/>
+                    <img src="./logo.jpg"/>
                 </header>
                 <main className="main-content">
                     {this.props.children}
