@@ -171,14 +171,6 @@ module.exports = function appAPI(connection) {
     },
     
     
-    //MAP FUNCTIONS
-    
-    googleDistanceMatrix: function(callback) {
-        
-        
-        
-    },
-    
     //TRIP FUNCTIONS
     
     
