@@ -2,8 +2,6 @@
 // use navigator.geolocation
 // http://html5doctor.com/finding-your-position-with-geolocation/
         
-
-
 `https://maps.googleapis.com/maps/api/distancematrix/json?
 origins=${request.params.currentlocation}
 &destinations=${request.params.tripdestination}
