@@ -18,7 +18,11 @@ var App = React.createClass({
             <div className="main-app">
                 <header className="main-header">
                     <h1><Link to="/">ECF Board</Link></h1>
+<<<<<<< HEAD
                     <img src="./logo.jpg"/>
+=======
+                    <img src="./battery_20_white_72x72.png"/>
+>>>>>>> upstream/master
                 </header>
                 <main className="main-content">
                     {this.props.children}
