@@ -8,7 +8,10 @@ var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
 
 var Login = require('./components/Login');
-var Home = require('./components/Home')
+var Home = require('./components/Home');
+var Map = require('./components/Map');
+var Horizontal = require('./components/Horizontal')
+var Light = require('./components/Light')
 
 var App = require('./components/App');
 var Landing = require('./components/Landing')
@@ -29,7 +32,10 @@ var routes = (
             <IndexRoute component={Login}>
             <Route path="/" component={Home}/>
             </IndexRoute>
-            <Route path="homepage" component={Landing}/>
+            <Route path="homepage" component={Horizontal}>
+            <Route path="light" component={Light}/>
+                <Route path="map" component={Map}/>            
+            </Route>
         </Route>
     </Router>
 );
