@@ -19,15 +19,23 @@ var Light = React.createClass({
     render: function(){
       if(this.state.lightOn === true){
     return (
-        <div className="lightBulb" onClick={this.handleChange}>
-            <div>{React.createElement(falightBulb, null)}</div>
+        <div>
+            
+            <div className="lightBulb" onClick={this.handleChange}>
+                <div>{React.createElement(falightBulb, null)}</div>
+            </div>
+            <span>{this.props.children}</span>
         </div>
         )
       }
       else{
           return (
-        <div className="lightBulb1" onClick={this.handleChange}>
-            <div>{React.createElement(falightBulb, null)}</div>
+        <div>
+            
+            <div className="lightBulb1" onClick={this.handleChange}>
+                <div>{React.createElement(falightBulb, null)}</div>
+            </div>
+            <span>{this.props.children}</span>
         </div>
         )
           

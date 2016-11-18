@@ -6,9 +6,16 @@ var Home = React.createClass({
   // ...
   showLock: function() {
     // Show the Auth0Lock widget
-    this.props.lock.social({
-  connections: ["facebook", "google-oauth2"]
-});;
+    var options = {
+ connections: ["facebook", "google-oauth2"],
+ icon: "/path/to/my/icon.png",
+ closable: false,
+ dict: {title: "EFC Board"},
+ focusInput: false,
+ gravatar: false,
+ callbackURL: "https://ecf-board-kitchdev.c9users.io/homepage"
+}
+    this.props.lock.social(options);
   },
 
 

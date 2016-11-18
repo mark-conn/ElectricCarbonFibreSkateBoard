@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import Slider from 'react-rangeslider';
 import axios from 'axios';
 
+var Check = require('./Check')
+var Light = require('./Light')
+var Speed = require('./Speed')
+var Rpm = require('./Rpm')
+
 var Horizontal = React.createClass({
   getInitialState: function() {
     return (
     this.state = {
-      value: 10 /** Start value **/
+      value: 0 /** Start value **/
       }
     )
   },
@@ -20,8 +25,13 @@ var Horizontal = React.createClass({
   render() {
     let { value } = this.state;
     return (
-      <div>
-        {this.props.children}
+      <div className="uiLayout">
+        <Light/>
+        <div className="bottomDisp">
+          <Speed/>
+          <Rpm/>
+          <Check/>
+        </div>
         <div className='horizontal-slider'>
           <div className='sliderDiv'>
             <h4>Power Level</h4>

@@ -2,10 +2,10 @@ var express = require('express');
 
 var app = express();
 
-app.use('/files', express.static(__dirname + '/src'));
+app.use('/static', express.static(__dirname + '/static'));
 
 app.get('/*', function(req, res) {
-    res.sendFile(__dirname + '/src/index.html');
+    res.sendFile(__dirname + '/static/index.html');
 });
 
 app.listen(process.env.PORT);
