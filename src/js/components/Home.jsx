@@ -1,5 +1,5 @@
 var React = require('react');
-
+var logo_img = require('../../../static/logo.jpg');
 
 
 var Home = React.createClass({
@@ -8,7 +8,7 @@ var Home = React.createClass({
     // Show the Auth0Lock widget
     var options = {
  connections: ["facebook", "google-oauth2"],
- icon: "/path/to/my/icon.png",
+ icon: logo_img,
  closable: false,
  dict: {title: "EFC Board"},
  focusInput: false,

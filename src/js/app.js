@@ -33,8 +33,8 @@ var routes = (
             <IndexRoute component={Login}>
             <Route path="/" component={Home}/>
             </IndexRoute>
-            <Route path="homepage" component={Horizontal}>
-            </Route>
+            <Route path="homepage" component={Horizontal}/>
+            <Route path="map" component={Map}/>
         </Route>
     </Router>
 );

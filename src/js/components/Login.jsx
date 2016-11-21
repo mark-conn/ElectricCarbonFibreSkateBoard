@@ -31,7 +31,7 @@ var Login = React.createClass({
     },
     render: function() {
         return (
-            <div className="main-login">oooppppuio
+            <div className="main-login">
                     <Home lock={this.lock}/>
             </div>
             

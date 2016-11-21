@@ -6,6 +6,7 @@ var Check = require('./Check')
 var Light = require('./Light')
 var Speed = require('./Speed')
 var Rpm = require('./Rpm')
+var TripButton = require('./TripButton')
 
 var Horizontal = React.createClass({
   getInitialState: function() {
@@ -21,7 +22,7 @@ var Horizontal = React.createClass({
       value: value
     });
   },
-
+  
   render() {
     let { value } = this.state;
     return (
@@ -31,6 +32,7 @@ var Horizontal = React.createClass({
           <Speed/>
           <Rpm/>
           <Check/>
+          <TripButton/>
         </div>
         <div className='horizontal-slider'>
           <div className='sliderDiv'>

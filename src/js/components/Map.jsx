@@ -91,7 +91,7 @@ var Map = React.createClass({
     },
     
     _nextButton: function() {
-        history.push(`/?currentlocation=${this.state.currentLat},${this.state.currentLon}&destination=${this.state.destination}&distance=${this.state.distanceMatrix.distance}&duration=${this.state.distanceMatrix.duration}`);
+        history.push(`/homepage?currentlocation=${this.state.currentLat},${this.state.currentLon}&destination=${this.state.destination}&distance=${this.state.distanceMatrix.distance}&duration=${this.state.distanceMatrix.duration}`);
     },
     
     _backButton: function() {

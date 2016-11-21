@@ -84,7 +84,8 @@
 	            { component: Login },
 	            React.createElement(Route, { path: '/', component: Home })
 	        ),
-	        React.createElement(Route, { path: 'homepage', component: Horizontal })
+	        React.createElement(Route, { path: 'homepage', component: Horizontal }),
+	        React.createElement(Route, { path: 'map', component: Map })
 	    )
 	);
 	
@@ -65068,7 +65069,6 @@
 	        return React.createElement(
 	            'div',
 	            { className: 'main-login' },
-	            'oooppppuio',
 	            React.createElement(_Home2.default, { lock: this.lock })
 	        );
 	    }
@@ -65080,19 +65080,20 @@
 /* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var React = __webpack_require__(1);
+	var logo_img = __webpack_require__(566);
 	
 	var Home = React.createClass({
-	  displayName: "Home",
+	  displayName: 'Home',
 	
 	  // ...
 	  showLock: function showLock() {
 	    // Show the Auth0Lock widget
 	    var options = {
 	      connections: ["facebook", "google-oauth2"],
-	      icon: "/path/to/my/icon.png",
+	      icon: logo_img,
 	      closable: false,
 	      dict: { title: "EFC Board" },
 	      focusInput: false,
@@ -65104,15 +65105,15 @@
 	
 	  render: function render() {
 	    return React.createElement(
-	      "div",
-	      { className: "login-box" },
+	      'div',
+	      { className: 'login-box' },
 	      React.createElement(
-	        "button",
-	        { className: "login-button" },
+	        'button',
+	        { className: 'login-button' },
 	        React.createElement(
-	          "a",
-	          { className: "login", onClick: this.showLock },
-	          "Sign In"
+	          'a',
+	          { className: 'login', onClick: this.showLock },
+	          'Sign In'
 	        )
 	      )
 	    );
@@ -65216,7 +65217,7 @@
 	    },
 	
 	    _nextButton: function _nextButton() {
-	        history.push('/?currentlocation=' + this.state.currentLat + ',' + this.state.currentLon + '&destination=' + this.state.destination + '&distance=' + this.state.distanceMatrix.distance + '&duration=' + this.state.distanceMatrix.duration);
+	        history.push('/homepage?currentlocation=' + this.state.currentLat + ',' + this.state.currentLon + '&destination=' + this.state.destination + '&distance=' + this.state.distanceMatrix.distance + '&duration=' + this.state.distanceMatrix.duration);
 	    },
 	
 	    _backButton: function _backButton() {
@@ -66804,6 +66805,7 @@
 	var Light = __webpack_require__(551);
 	var Speed = __webpack_require__(554);
 	var Rpm = __webpack_require__(555);
+	var TripButton = __webpack_require__(564);
 	
 	var Horizontal = _react2.default.createClass({
 	  displayName: 'Horizontal',
@@ -66832,7 +66834,8 @@
 	        { className: 'bottomDisp' },
 	        _react2.default.createElement(Speed, null),
 	        _react2.default.createElement(Rpm, null),
-	        _react2.default.createElement(Check, null)
+	        _react2.default.createElement(Check, null),
+	        _react2.default.createElement(TripButton, null)
 	      ),
 	      _react2.default.createElement(
 	        'div',
@@ -68170,6 +68173,103 @@
 	});
 	
 	module.exports = Landing;
+
+/***/ },
+/* 564 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var history = __webpack_require__(175).browserHistory;
+	var axios = __webpack_require__(520);
+	var Map = __webpack_require__(519);
+	
+	var TripButton = React.createClass({
+	    displayName: 'TripButton',
+	
+	
+	    getInitialState: function getInitialState() {
+	        return {
+	
+	            buttondisplay: "New Trip",
+	            newtripClicked: false,
+	            checkTrip: false,
+	            checkTripReading: null,
+	            tripStarted: false
+	
+	        };
+	    },
+	
+	    componentDidMount: function componentDidMount() {
+	        console.log(this.props.location);
+	        if (this.props.location.query.destination) {
+	            this.setState({
+	                newtripClicked: true
+	            });
+	        }
+	        if (this.state.newtripClicked) {
+	            this.setState({
+	                buttondisplay: "Check"
+	            });
+	        }
+	    },
+	
+	    _buttonClick: function _buttonClick() {
+	        var _this = this;
+	
+	        if (this.state.buttondisplay === "New Trip") {
+	            this.setState({
+	                newtripClicked: true
+	            }, function () {
+	
+	                history.push('/map');
+	            });
+	        } else if (this.state.buttondisplay === "Check") {
+	
+	            axios.get('/checktrip/' + this.props.currentlocation.query + '/' + this.props.distance.query + '/' + this.props.duration.query).then(function (result) {
+	
+	                _this.setState({
+	                    checkTripReading: result.data,
+	                    buttondisplay: "Start Trip"
+	                });
+	            });
+	        } else if (this.state.buttondisplay === "Start Trip") {
+	            this.setState({
+	                tripStarted: true
+	            }, function () {
+	
+	                axios.get('/starttrip/' + _this.props.currentlocation.query).then(function (result) {
+	                    _this.setState({
+	                        buttondisplay: "End Trip"
+	                    });
+	                });
+	            });
+	        }
+	    },
+	
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: 'mapButton' },
+	            React.createElement(
+	                'button',
+	                { onClick: this._buttonClick },
+	                this.state.buttondisplay
+	            )
+	        );
+	    }
+	
+	});
+	
+	module.exports = TripButton;
+
+/***/ },
+/* 565 */,
+/* 566 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "static/media/logo.306356be.jpg";
 
 /***/ }
 /******/ ]);
