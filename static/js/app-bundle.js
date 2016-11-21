@@ -65129,6 +65129,7 @@
 	
 	var React = __webpack_require__(1);
 	var axios = __webpack_require__(520);
+	var history = __webpack_require__(175).browserHistory;
 	
 	var Map = React.createClass({
 	    displayName: 'Map',
@@ -65137,7 +65138,12 @@
 	    getInitialState: function getInitialState() {
 	        return {
 	            loading: false,
-	            display: null
+	            display: null,
+	            currentLat: null,
+	            currentLon: null,
+	            destination: null,
+	            suggestionArray: [],
+	            distanceMatrix: { distance: null, duration: null }
 	        };
 	    },
 	
@@ -65148,39 +65154,144 @@
 	            that.currentLat = position.coords.latitude;
 	            that.currentLon = position.coords.longitude;
 	
-	            axios.get('getstaticmap/' + that.currentLat + ',' + that.currentLon).then(function (result) {
+	            axios.get('/getfirstmap/' + that.currentLat + ',' + that.currentLon).then(function (result) {
 	                that.setState({
-	                    display: result.data
+	                    display: result.data,
+	                    currentLat: that.currentLat,
+	                    currentLon: that.currentLon
 	                });
 	            });
 	        });
 	    },
 	
-	    // setDestination: function() {
-	    //     function getDistanceMatrix() {
-	    //         axios.get(`/getdistancematrix/${that.currentLat},${that.currentLon}`)
-	    //             .then(function(result) {
-	    //                 var distanceMatrix = {distance: result.data.distance.text, duration: result.data.duration.text};
-	    //                 return distanceMatrix;
-	    //             });
-	    //         }
-	    //         function getStaticMap() {
-	    //         axios.get(`/getstaticmap`)    
+	    getAutocomplete: function getAutocomplete() {
+	        var that = this;
+	        var dest = this.refs.destinationInput.value;
+	        console.log(dest);
+	        if (dest.length > 1) {
+	            axios.get('/auto-complete/' + this.state.currentLat + ',' + this.state.currentLon + '/' + dest).then(function (result) {
+	                that.setState({
+	                    suggestionArray: result.data
+	                });
+	            });
+	        }
+	    },
 	
-	    //         }
-	    // },
+	    setDestination: function setDestination(item) {
+	        var _this = this;
+	
+	        var that = this;
+	        this.setState({
+	            destination: encodeURIComponent(item)
+	        }, function () {
+	
+	            axios.get('/path/' + _this.state.currentLat + ',' + _this.state.currentLon + '/' + _this.state.destination).then(function (result) {
+	                that.setState({
+	                    path: result.data
+	                }, function () {
+	                    that.getResultMap();
+	                });
+	            });
+	        });
+	    },
+	
+	    getResultMap: function getResultMap() {
+	        var that = this;
+	
+	        function getDistanceMatrix() {
+	            return axios.get('/getdistancematrix/' + that.state.currentLat + ',' + that.state.currentLon + '/' + that.state.destination);
+	        }
+	
+	        function getStaticMap() {
+	            var url = '/getresultmap/' + that.state.currentLat + ',' + that.state.currentLon + '/' + that.state.destination + '/' + that.state.path;
+	            return axios.get(url);
+	        }
+	
+	        axios.all([getDistanceMatrix(), getStaticMap()]).then(axios.spread(function (matrix, map, directions) {
+	            that.setState({
+	                display: map.data,
+	                distanceMatrix: { distance: matrix.data.distance.text, duration: matrix.data.duration.text }
+	            });
+	        }));
+	    },
+	
+	    _nextButton: function _nextButton() {
+	        history.push('/?currentlocation=' + this.state.currentLat + ',' + this.state.currentLon + '&destination=' + this.state.destination + '&distance=' + this.state.distanceMatrix.distance + '&duration=' + this.state.distanceMatrix.duration);
+	    },
+	
+	    _backButton: function _backButton() {
+	        this.setState({
+	            destination: null
+	        });
+	    },
 	
 	    render: function render() {
-	        console.log(this.state.display);
+	
 	        return React.createElement(
 	            'div',
-	            { className: 'map' },
-	            React.createElement('img', { src: this.state.display }),
-	            React.createElement(
-	                'p',
-	                null,
-	                'There should be a map here'
-	            )
+	            { className: 'map-container' },
+	            React.createElement('img', { className: 'static-map', src: this.state.display }),
+	            this.state.destination ? React.createElement(
+	                'div',
+	                { className: 'distance-matrix' },
+	                React.createElement(
+	                    'p',
+	                    null,
+	                    React.createElement('i', { className: 'fa fa-map-marker', 'aria-hidden': 'true' }),
+	                    ' ',
+	                    this.state.distanceMatrix.distance
+	                ),
+	                React.createElement(
+	                    'p',
+	                    null,
+	                    React.createElement('i', { className: 'fa fa-clock-o', 'aria-hidden': 'true' }),
+	                    ' ',
+	                    this.state.distanceMatrix.duration
+	                )
+	            ) : null,
+	            this.state.destination ? null : React.createElement(
+	                'form',
+	                { onSubmit: this.getResultMap },
+	                React.createElement('input', { ref: 'destinationInput', className: 'destination-input', type: 'text', onChange: this.getAutocomplete }),
+	                React.createElement(
+	                    'button',
+	                    { className: 'destination-button' },
+	                    'Search'
+	                )
+	            ),
+	            this.state.destination ? null : React.createElement(
+	                'ul',
+	                { className: 'suggestion-list' },
+	                this.state.suggestionArray.map(function (item) {
+	                    var _this2 = this;
+	
+	                    return React.createElement(
+	                        'li',
+	                        null,
+	                        React.createElement(
+	                            'button',
+	                            { onClick: function onClick() {
+	                                    return _this2.setDestination(item);
+	                                } },
+	                            item
+	                        )
+	                    );
+	                }.bind(this))
+	            ),
+	            this.state.destination ? React.createElement(
+	                'div',
+	                { className: 'buttons-div' },
+	                React.createElement(
+	                    'button',
+	                    { className: 'next', onClick: this._nextButton },
+	                    decodeURIComponent(this.state.destination)
+	                ),
+	                React.createElement(
+	                    'button',
+	                    { className: 'back', onClick: this._backButton },
+	                    React.createElement('i', { className: 'fa fa-undo', 'aria-hidden': 'true' })
+	                )
+	            ) : null
 	        );
 	    }
 	
@@ -67558,13 +67669,13 @@
 	var Link = __webpack_require__(175).Link;
 	
 	
-	var FaBat4 = __webpack_require__(558);
-	var FaBat3 = __webpack_require__(559);
-	var FaBat2 = __webpack_require__(560);
-	var FaBat1 = __webpack_require__(561);
-	var FaBat0 = __webpack_require__(562);
+	var FaBat4 = __webpack_require__(557);
+	var FaBat3 = __webpack_require__(558);
+	var FaBat2 = __webpack_require__(559);
+	var FaBat1 = __webpack_require__(560);
+	var FaBat0 = __webpack_require__(561);
 	
-	var logo_img = __webpack_require__(564);
+	var logo_img = __webpack_require__(562);
 	/*
 	This is the layout component. It's displayed by the top-level Route
 	this.props.children will correspond to the current URL's component.
@@ -67749,8 +67860,7 @@
 	module.exports = App;
 
 /***/ },
-/* 557 */,
-/* 558 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67803,7 +67913,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 559 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67856,7 +67966,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 560 */
+/* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67909,7 +68019,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 561 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67962,7 +68072,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 562 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68015,6 +68125,12 @@
 	module.exports = exports['default'];
 
 /***/ },
+/* 562 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "static/media/imageedit_1_3219787303.0b34a5e4.png";
+
+/***/ },
 /* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -68054,12 +68170,6 @@
 	});
 	
 	module.exports = Landing;
-
-/***/ },
-/* 564 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "static/media/imageedit_1_3219787303.0b34a5e4.png";
 
 /***/ }
 /******/ ]);

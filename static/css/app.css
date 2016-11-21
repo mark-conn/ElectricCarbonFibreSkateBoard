@@ -316,3 +316,80 @@ Map{
     color: white;
     text-align: center;
 }
+
+
+/* MAP CSS */
+.map-container {
+    max-width: 100%;
+    height: 500px;
+}
+
+.static-map {
+     width: 100vw;
+     margin: 0;
+}
+
+.distance-matrix {
+    display: flex;
+    max-width: 100%;
+    height: 8vh;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.distance-matrix p {
+    font-size: 1.5em;
+    color: blue;
+}
+
+.distance-matrix p i {
+    color: black;
+    font-size: 1.8em;
+}
+
+.suggestion-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.suggestion-list button {
+    color: whitesmoke;
+    background-color: rgba(0, 102, 255, 0.5);
+    border: none;
+    border-radius: .5em;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: .5em .5em;
+    margin-bottom: .2em;
+}
+
+.destination-input {
+    width: 100%;
+    font-size: 1.5em;
+}
+
+.destination-button {
+    display: none;
+    
+}
+
+.buttons-div {
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    height: 8vh;
+    margin-top: .2em;
+}
+
+.buttons-div i {
+    font-size: 1.5em;
+}
+
+.buttons-div button{
+    font-size: 1.4em;
+    border-radius: .5em;
+    padding: .5em .5em;
+    color: whitesmoke;
+    cursor: pointer;
+    background-color: rgba(0, 102, 255, 0.5);
+}

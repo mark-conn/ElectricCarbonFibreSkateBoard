@@ -1,8 +1,11 @@
 const Particle = require('particle-api-js');
+const fetch = require('node-fetch');
 const particle = new Particle();
 const wheelCircumference = 0.3;
 const battery = 10;
 
+
+// BOARD VARIABLES
 // Switches to true when 'TRIP' mode is engaged
 var trip = false;
 
@@ -14,14 +17,15 @@ var speed;
 // While in 'TRIP', speed variable is pushed to this array every time it is updated
 var speedArray = [];
 
+var currentCap;
 var lights;
 var powerLevel;
 var rpm;
 var tripDistance;
-var currentCap;
-var currentLocation;
 
-// trip variables
+
+// MAP/TRIP VARIABLES
+var currentLocation;
 var tripStartTime;
 var tripStartPoint;
 var tripStartingBattery;
@@ -170,16 +174,17 @@ module.exports = function appAPI(connection) {
         
     },
     
-    
     //TRIP FUNCTIONS
     
     
-    tripChecker: function() {
+    tripChecker: function(location, distance, duration, callback) {
         
+        currentLocation = location;
         // current power level variable
             powerLevel;
         
         // distance = kms from Google 
+            tripDistance = distance;
         
         // battery = current battery percent variable
             batteryPercent;
@@ -195,16 +200,9 @@ module.exports = function appAPI(connection) {
         
     },
     
-    newTrip: function() {
-        
-        // MAP renders and destination picked
-        // MAIN renders and power level set, lights set
-        api.tripChecker();
-        // NEW TRIP button becomes START TRIP button
-        
-    },
+
     
-    startTrip: function() {
+    startTrip: function(location) {
         
         // get a starting time for the trip
         // get a starting location for the trip from Google API
@@ -214,7 +212,8 @@ module.exports = function appAPI(connection) {
         
         // use navigator.geolocation
         // http://html5doctor.com/finding-your-position-with-geolocation/
-        tripStartPoint = '';
+        // user's current location should be ascertained from user device
+        tripStartPoint = location;
         
         tripStartingBattery = batteryPercent;
         trip = true;
@@ -229,12 +228,12 @@ module.exports = function appAPI(connection) {
         
     },
     
-    endTrip: function() {
+    endTrip: function(location, distance) {
         
         var tripEndTime = Date.now();
         
         // location from Google API
-        var tripEndPoint = '';
+        var tripEndPoint = location;
         
         var speedArraySum = speedArray.reduce(function(a,b){
             return a + b;
@@ -247,7 +246,7 @@ module.exports = function appAPI(connection) {
         var powerUsage = tripStartingBattery - tripEndingBattery;
         
         // distance from Google Map API
-        var distance = '';
+        tripDistance;
         
         connection.query(
             `INSERT INTO trips(
@@ -266,7 +265,8 @@ module.exports = function appAPI(connection) {
             connection.query(
                 `INSERT INTO tripSpeeds(
                     speed,
-                    time
+                    time,
+                    tripId
                     ) VALUES (?,?)`, [obj.speed, obj.time]
                     );
         });
