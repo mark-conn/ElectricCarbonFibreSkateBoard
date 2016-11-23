@@ -75,6 +75,7 @@ app.get('/lights/:toggle', function(request, response){
 
 // SPEAK TO INTERNAL FUNCTIONS/DATABASE
 app.get('/checktrip/:currentlocation/:distance/:duration', function(request, response) {
+
     api.tripChecker(request.params.currentlocation, request.params.distance, request.params.duration, function(err, result){
         if(err) console.log(err)
         else {
@@ -85,9 +86,23 @@ app.get('/checktrip/:currentlocation/:distance/:duration', function(request, res
 
 app.get('/starttrip/:currentlocation', function(request, response) {
     api.startTrip(request.params.currentlocation);
+    response.send("executed");
     
 });
 
+app.get('/endtrip/:currentlocation', function(request, response){
+    api.endTrip(request.params.currentlocation);
+});
+
+app.get('/timechecker', function(request, response) {
+    
+    api.timeChecker(function(err, result) {
+        if(err) console.log(err);
+        else {
+        response.send(result);
+        }
+    });
+});
 
 
 // SPEAK TO MAPS APIS

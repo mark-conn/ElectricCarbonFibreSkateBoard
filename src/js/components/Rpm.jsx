@@ -5,7 +5,7 @@ import axios from 'axios';
 var Revs = React.createClass({
     getInitialState: function(){
       return {
-        Rpm  : 1500
+        Rpm: 0
       }
     },
             // componentDidMount: function() {
@@ -22,7 +22,7 @@ var Revs = React.createClass({
     render: function(){
         return (
             <div className= "tachometer">
-                <span>Rpm: {this.state.Rpm} </span>
+                <span className="numbers">Rpm<br/> {this.state.Rpm} </span>
             </div>
         )
     }

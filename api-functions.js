@@ -174,11 +174,11 @@ module.exports = function appAPI(connection) {
         
     },
     
+    
     //TRIP FUNCTIONS
     
-    
     tripChecker: function(location, distance, duration, callback) {
-        
+        console.log("in function");
         currentLocation = location;
         // current power level variable
             powerLevel;
@@ -190,17 +190,17 @@ module.exports = function appAPI(connection) {
             batteryPercent;
         
         // distance/RPM = hours to complete trip
-        // current draw * hours = capacity trip(amp/hours)
+        var hours = tripDistance / rpm
         
+        // current draw * hours = capacity trip(amp/hours)
+        var capacityTrip = 
         // capacity trip/ current cap
             // if / else enough power, display
             // good --> api.startTrip();
             // bad say "try turning lights off or lower power level"
             // 
-        
+        callback(null, "Green")
     },
-    
-
     
     startTrip: function(location) {
         
@@ -217,7 +217,7 @@ module.exports = function appAPI(connection) {
         
         tripStartingBattery = batteryPercent;
         trip = true;
-
+    
         
     },
     
@@ -228,7 +228,7 @@ module.exports = function appAPI(connection) {
         
     },
     
-    endTrip: function(location, distance) {
+    endTrip: function(location) {
         
         var tripEndTime = Date.now();
         
@@ -271,6 +271,13 @@ module.exports = function appAPI(connection) {
                     );
         });
     },
+    
+    timeChecker: function(callback) {
+        var time = Date.now();
+        var timeLeft = time - tripStartTime;
+        callback(null, timeLeft);
+        
+    }
     
     };
     

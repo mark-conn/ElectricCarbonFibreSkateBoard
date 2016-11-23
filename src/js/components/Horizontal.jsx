@@ -7,16 +7,23 @@ var Light = require('./Light')
 var Speed = require('./Speed')
 var Rpm = require('./Rpm')
 var TripButton = require('./TripButton')
+var TimeLeft = require('./TimeLeft')
 
 var Horizontal = React.createClass({
   getInitialState: function() {
     return (
     this.state = {
-      value: 0 /** Start value **/
+      value: 0, /** Start value **/
+      tripStarted: false
       }
     )
   },
-  
+  _handleChangeState: function(event){
+    console.log("this function has triggered")
+    this.setState({
+      tripStarted: !this.state.tripStarted
+    })
+  },
   handleChange: function(value) {
     this.setState({
       value: value
@@ -24,19 +31,35 @@ var Horizontal = React.createClass({
   },
   
   render() {
+    console.log(this.state.tripStarted)
     let { value } = this.state;
+    console.log(this.props)
     return (
+      
+      
       <div className="uiLayout">
-        <Light/>
+
+        <div className="topDisp">
+          <div className="checkContainer">
+            <span className="smallDesc">Status</span>
+            <Check/>
+          </div>
+          <div className="bulbCon">
+            <Light/>
+          </div>
+          <div  className= "tripContainer">
+            <TripButton data={this.props.location.query} onClick={this._handleChangeState} tripStarted={this.state.tripStarted}/>
+          </div>
+        </div>
+        
         <div className="bottomDisp">
-          <Speed/>
+        
           <Rpm/>
-          <Check/>
-          <TripButton/>
+          <Speed/>
         </div>
         <div className='horizontal-slider'>
           <div className='sliderDiv'>
-            <h4>Power Level</h4>
+            <h4 className="numbers">Power Level: {value}</h4>
             <Slider
               min={0}
               max={100}
@@ -44,7 +67,10 @@ var Horizontal = React.createClass({
               onChange={this.handleChange}
             />
           </div>
-          <div className='value'>Value: {value}</div>
+        {/*  <div className='value'>Value: {value}</div> */}
+        </div>
+        <div className="tripTimer">
+        {this.state.tripStarted ? <TimeLeft duration={this.props.location.query.duration}/> : null}
         </div>
       </div>
     );

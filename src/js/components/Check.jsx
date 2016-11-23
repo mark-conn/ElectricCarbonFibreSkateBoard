@@ -5,6 +5,10 @@ import axios from 'axios';
 
 /* this component is meant to check the general status of the boards internal functions, 
 whether it's hardwear, server or app - depicting a GREEN YELLOW OR RED circle. */
+var check = require('react-icons/lib/fa/check');
+var warning = require('react-icons/lib/fa/exclamation-triangle');
+var problem = require('react-icons/lib/fa/thumbs-o-down')
+
 
 
 var Check = React.createClass({
@@ -30,7 +34,7 @@ var Check = React.createClass({
             return (
             <div  className="warnLights">
                <div className="checkCircleG">
-                    PERFECT
+                   {React.createElement(check, null)}
                 </div>
             </div>
                 )
@@ -39,7 +43,7 @@ var Check = React.createClass({
             return (
                 <div className="warnLights">
                     <div className="checkCircleY">
-                        WARNING
+                        {React.createElement(warning, null)}
                     </div>
                 </div>
                 )
@@ -48,7 +52,7 @@ var Check = React.createClass({
             return (
                 <div className="warnLights">
                     <div className="checkCircleR">
-                        ALERT!
+                        {React.createElement(problem, null)}
                     </div>
                 </div>
                 )

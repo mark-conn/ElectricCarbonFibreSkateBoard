@@ -10,7 +10,7 @@ var FaBat2 = require('react-icons/lib/fa/battery-2');
 var FaBat1 = require('react-icons/lib/fa/battery-1');
 var FaBat0 = require('react-icons/lib/fa/battery-0');
 
-var logo_img = require('../../../static/imageedit_1_3219787303.png');
+var logo_img = require('../../../static/logo.jpg');
 /*
 This is the layout component. It's displayed by the top-level Route
 this.props.children will correspond to the current URL's component.
@@ -21,7 +21,7 @@ If the URL is /user/:username then the User component will be displayed.
 var App = React.createClass({
         getInitialState: function(){
         return {
-            battPow: 45
+            battPow: 0
             }
         },
     // componentDidMount: function() {
@@ -35,12 +35,13 @@ var App = React.createClass({
     //         })
     //         ,10000 });
     // },
+
     render: function() {
     if(this.state.battPow <= 100 && this.state.battPow > 90){    
         return (
             <div className="main-app">
                 <header className="main-header">
-                    <h1><img src={logo_img}/></h1>
+                    <Link to={`/homepage`}><img className="logo" src={logo_img}/></Link>
                     <div className="batPer"> 
                         {React.createElement(FaBat4, null)}
                         <p className="Perc">{this.state.battPow}%</p>
@@ -57,7 +58,7 @@ var App = React.createClass({
          return (
             <div className="main-app">
                 <header className="main-header">
-                    <h1>ECF Board</h1>
+                    <Link to={`/homepage`}><img className="logo" src={logo_img}/></Link>
                     <div className="batPer">
                         {React.createElement(FaBat3, null)}
                         <p className="Perc">{this.state.battPow}%</p>
@@ -74,7 +75,7 @@ var App = React.createClass({
           return (
             <div className="main-app">
                 <header className="main-header">
-                    <h1>ECF Board</h1>
+                    <Link to={`/homepage`}><img className="logo" src={logo_img}/></Link>
                     <div  className="batPer">
                         {React.createElement(FaBat2, null)}
                         <p className="Perc">{this.state.battPow}%</p>
@@ -91,7 +92,7 @@ var App = React.createClass({
           return (
             <div className="main-app">
                 <header className="main-header">
-                    <h1>ECF Board</h1>
+                    <Link to={`/homepage`}><img className="logo" src={logo_img}/></Link>
                     <div className="batPer">
                         {React.createElement(FaBat1, null)}
                         <p className="Perc">{this.state.battPow}%</p>
@@ -108,7 +109,7 @@ var App = React.createClass({
                     return (
             <div className="main-app">
                 <header className="main-header">
-                    <h1>ECF Board</h1>
+                    <Link to={`/homepage`}><img className="logo" src={logo_img}/></Link>
                     <div className="batPer">
                         {React.createElement(FaBat0, null)}
                         <p className="Perc">{this.state.battPow}%</p>

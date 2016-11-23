@@ -2,40 +2,54 @@ var React = require('react');
 var history = require('react-router').browserHistory;
 var axios = require('axios');
 var Map = require('./Map');
+var maps = require('react-icons/lib/io/ios-navigate')
+var load = require('react-icons/lib/io/wrench')
+var start = require('react-icons/lib/fa/play-circle-o')
+var done = require('react-icons/lib/fa/flag-checkered')
+
+var newTrip = React.createElement(maps, null)
+var check = React.createElement(load, null)
+var tripStart = React.createElement(start, null)
+var endTrip = React.createElement(done, null)
+
+
 
 var TripButton = React.createClass ({
-    
+
     getInitialState: function() {
         return {
             
-            buttondisplay: "New Trip",
+            buttondisplay: newTrip,
             newtripClicked: false,
             checkTrip: false,
             checkTripReading: null,
             tripStarted: false,
+            tripEnded: false,
+            currentlocation: null,
+            destination: null,
+            distance: null,
+            duration: null
             
 
         };
     },
     
     componentDidMount: function() {
-        console.log(this.props.location)
-                if(this.props.location.query.destination) {
+    
+        if(this.props.data.currentlocation) {
             this.setState({
-                newtripClicked: true,
-            });
-            
-        }
-        if(this.state.newtripClicked) {
-            this.setState({
-                buttondisplay: "Check"
+                buttondisplay: check,
+                currentlocation: this.props.data.currentlocation,
+                destination: this.props.data.destination,
+                distance: this.props.data.distance,
+                duration: this.props.data.duration
             });
         } 
     },
     
     _buttonClick: function() {
         
-        if(this.state.buttondisplay === "New Trip") {
+        if(this.state.buttondisplay === newTrip) {
            this.setState({
                newtripClicked: true
            }, () => {
@@ -43,42 +57,76 @@ var TripButton = React.createClass ({
                 history.push(`/map`);  
            });
            
-        } else if(this.state.buttondisplay === "Check") {
-           
-           axios.get(`/checktrip/${this.props.currentlocation.query}/${this.props.distance.query}/${this.props.duration.query}`)
+        }else if(this.state.buttondisplay === check) {
+
+           axios.get(`/checktrip/${this.state.currentlocation}/${this.state.distance}/${this.state.duration}`)
            .then((result) => {
-               
+
                this.setState({
                    checkTripReading: result.data,
-                   buttondisplay: "Start Trip"
+                   buttondisplay: tripStart
                });
                
                
            });
             
         }
-          else if(this.state.buttondisplay === "Start Trip") {
+         else if(this.state.buttondisplay === tripStart) {
             this.setState({
                 tripStarted: true
             }, () => {
                 
-                axios.get(`/starttrip/${this.props.currentlocation.query}`)
+                axios.get(`/starttrip/${this.state.currentlocation}`)
                 .then( (result) => {
                     this.setState({
-                        buttondisplay: "End Trip"
+                        buttondisplay: endTrip
                     });
+                    this.props.onClick();
                 });
             });
         }
+         else if(this.state.buttondisplay === endTrip) {
+            this.setState({
+                tripEnded: true,
+                buttondisplay: newTrip
+            });
+            this.props.onClick();
+         }
         
     },
     
     render: function() {
+        if(this.state.buttondisplay === tripStart)
         return (
-        <div className="mapButton">
-            <button onClick={this._buttonClick}>{this.state.buttondisplay}</button>
-        </div>
+            <div className="mapButton1">
+                <span className="smallDesc">Start Trip</span>
+                <button onClick={this._buttonClick}>{this.state.buttondisplay}</button>
+            </div>
         )
+        else if(this.state.buttondisplay === endTrip){
+        return (
+            <div className="mapButton2">
+                <span className="smallDesc">End Trip</span>
+                <button onClick={this._buttonClick}>{this.state.buttondisplay}</button>
+            </div>
+            )
+        }
+            else if(this.state.buttondisplay === check){
+        return (
+            <div className="mapButton3">
+                <span className="smallDesc">Check</span>
+                <button onClick={this._buttonClick}>{this.state.buttondisplay}</button>
+            </div>
+            )
+        }
+        else{
+        return (
+            <div className="mapButton">
+                <span className="smallDesc">New Trip</span>
+                <button onClick={this._buttonClick}>{this.state.buttondisplay}</button>
+            </div>
+            )            
+        }
         
     }
     

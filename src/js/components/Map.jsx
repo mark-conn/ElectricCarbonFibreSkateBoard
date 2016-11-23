@@ -1,8 +1,9 @@
 var React = require('react');
 var axios = require('axios');
 var history = require('react-router').browserHistory;
+var Link = require('react-router').Link;
 
-
+var destination;
 var Map = React.createClass({
     
     getInitialState: function() {
@@ -37,6 +38,7 @@ var Map = React.createClass({
     },
     
     getAutocomplete: function() {
+        destination = this.state.destination
         var that = this;
         var dest = this.refs.destinationInput.value;
         console.log(dest);
@@ -113,7 +115,7 @@ var Map = React.createClass({
                 : null}
                 {this.state.destination ? null :
                 <form onSubmit={this.getResultMap}>
-                    <input ref="destinationInput" className="destination-input" type="text" onChange={this.getAutocomplete}/>
+                    <input ref="destinationInput" className="destination-input" type="text" placeholder="Pick a destination" onChange={this.getAutocomplete}/>
                     <button className="destination-button">Search</button>
                 </form>}
                 
@@ -131,7 +133,8 @@ var Map = React.createClass({
                     <button className="next" onClick={this._nextButton}>{decodeURIComponent(this.state.destination)}</button>
                     <button className="back" onClick={this._backButton}><i className="fa fa-undo" aria-hidden="true"></i></button>
                     </div> 
-                : null }
+                : null} 
+                <div className="backButton"><Link to={`/homepage`}>Back to Homepage</Link></div>
             </div>
             );
     }

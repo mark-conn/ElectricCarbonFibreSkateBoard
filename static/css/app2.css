@@ -118,7 +118,7 @@ Map{
 }
 .rangeslider-horizontal .rangeslider__fill {
   height: 100%;
-  background: rgba(0, 102, 255, 0.5);
+  background: #0f3c9e;
   border-radius: 10px;
   top: 0;
 }
@@ -127,7 +127,7 @@ Map{
   height: 40px;
   border-radius: 40px;
   top: -10px;
-  background-color: gray;
+  background-color: #b3b3b3;
 }
 
 .horizontal-slider{
@@ -136,76 +136,6 @@ Map{
 }
 
 
-.lightBulb{
-    display: flex;
-    justify-content: center;
-    flex-direction: column-reverse;
-    align-items: center;
-}
-.lightBulb1{
-    display: flex;
-    justify-content: center;
-    flex-direction: column-reverse;
-    align-items: center;
-}
-.lightBulb1 svg {
-    width: 70px;
-    height: 70px;
-    display: flex;
-    justify-content: center;
-    color: #0f3c9e
-;
-    padding-top: 0;
-    cursor: pointer;
-}
-
-.lightBulb svg {
-    width: 70px;
-    height: 70px;
-    color: ;
-    display: flex;
-    justify-content: center;
-    padding-top: 0;
-    cursor: pointer;
-    
-}
-
-
-.lightBulb svg {
-  text-align: center;
-  font-size: 7em;
-  margin: 20px 0 20px 0;
-  cursor: pointer;
-}
-
-.lightBulb svg {
-  text-decoration: none;
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  transition: all 0.5s;
-  margin: 0;
-}
-
-.lightBulb:nth-child(1) svg {
-  color: rgba(0, 102, 255, 0.5);
-  font-family: Monoton;
-  -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
-  -moz-animation: neon1 1.5s ease-in-out infinite alternate;
-  animation: neon1 1.5s ease-in-out infinite alternate;
-  margin: 0;
-
-}
-
-.lightBulb:nth-child(1) svg:hover {
-  color: #3399ff;
-  -webkit-animation: none;
-  -moz-animation: none;
-  animation: none;
-}
-
-.lightBulb:hover {
-  color: #ffffff;
-}
 
 
 /*.lightBulb svg:onclick {*/
@@ -221,7 +151,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgba(0, 153, 51, 0.5);
+    background-color: rgba(76, 187, 23, 0.7);
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -235,7 +165,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgb(0, 153, 51);
+    background-color: rgb(76, 187, 23);
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -303,12 +233,15 @@ Map{
     align-items: center;
     /*background-image: url(https://s-media-cache-ak0.pinimg.com/736x/ab/7e/4c/ab7e4cf7e3341331c6b23801e883eb05.jpg);*/
     height: 69vh;
+    position: relative;
+    top: 5vh;
 }
 
 .warnLights {
     display: flex;
     width: 55px;
     justify-content: flex-end;
+    margin: 0;
 }
 
 .bottomDisp {
@@ -325,39 +258,39 @@ Map{
     width: 85vw;
     display: flex;
     justify-content: space-around;
+    margin-bottom: 0;
 }
 
 
-.speedometer span{
-    display: flex;
-    flex-direction:column;
-    justify-content: center;
-    position: relative;
+/*.speedometer span{*/
+/*    display: flex;*/
+/*    flex-direction:column;*/
+/*    justify-content: center;*/
+/*    position: relative;*/
+/*    background-color: #0f3c9e;*/
+/*    width: 55px;*/
+/*    height: 55px;*/
+/*    border-radius: 50%;*/
+/*    color: white;*/
+/*    text-align: center;*/
+/*    font: 13.3333px 'Source Code Pro', monospace, Helvetica;*/
+/*}*/
 
-    background-color: #0f3c9e
-;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    color: white;
-    text-align: center;
-    font: 13.3333px 'Source Code Pro', monospace, Helvetica;
-}
 
-.tachometer span{
-    display: flex;
-    justify-content: center;
+/*.tachometer span{*/
+/*    display: flex;*/
+/*    justify-content: center;*/
 
-    flex-direction:column;
-    background-color: #0f3c9e
- ;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    color: white;
-    text-align: center;
-    font: 13.3333px 'Source Code Pro', monospace, Helvetica;
-}
+/*    flex-direction:column;*/
+/*    background-color: #0f3c9e*/
+/* ;*/
+/*    width: 55px;*/
+/*    height: 55px;*/
+/*    border-radius: 50%;*/
+/*    color: white;*/
+/*    text-align: center;*/
+/*    font: 13.3333px 'Source Code Pro', monospace, Helvetica;*/
+/*}*/
 
 
 /* MAP CSS */
@@ -397,8 +330,7 @@ Map{
 
 .suggestion-list button {
     color: whitesmoke;
-    background-color: #0f3c9e
-;
+    background-color: #0f3c9e;
     border: none;
     border-radius: 0.2em;
     font-size: 1em;
@@ -410,7 +342,7 @@ Map{
 }
 
 .destination-input {
-    width: 94vw;
+    width: 100%;
     font-size: 1.5em;
     height: 40px;
     background-color: #ecf2f9;
@@ -438,8 +370,7 @@ Map{
 
 .buttons-div button{
     color: whitesmoke;
-    background-color: #0f3c9e
-;
+    background-color: #0f3c9e;
     border: none;
     border-radius: 0.2em;
     font-size: 1em;
@@ -448,15 +379,15 @@ Map{
     margin-bottom: .2em;
     width: 95vw;
     font-family: inherit;
-    height: 4em;
+    height: 5em;
 }
 
 .mapButton button{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #0f3c9e
-;
+    background-color: rgba(255,102,0, 0.7);
+    position: relative;
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -467,15 +398,12 @@ Map{
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
 
-.mapButton button:hover{
-    background-color: #8c8c8c
-}
 
 .mapButton1 button{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: 	 #66cc99 ;
+    background-color: rgba(255,102,0,0.7);
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -489,7 +417,7 @@ Map{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ff8080 ;
+    background-color: rgba(255,102,0,0.7);
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -497,12 +425,13 @@ Map{
     text-align: center;
     cursor: pointer;
     border: none;
+    font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
 .mapButton3 button{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffcc99 ;
+    background-color: rgba(255,102,0,0.7);
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -510,14 +439,14 @@ Map{
     text-align: center;
     cursor: pointer;
     border: none;
+    font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
 .TimeLeft span{
     text-rendering: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #0f3c9e
-;
+    background-color: #0f3c9e;
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -530,10 +459,9 @@ Map{
 .login-button{
     margin-top: 10vh;
     border: none;
-    width: 100px;
+    width: 120px;
     height: 35px;
-    background: #0f3c9e
-;
+    background: #0f3c9e;
     color: white;
     border-radius: .5em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
@@ -546,8 +474,7 @@ Map{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #0f3c9e
-;
+    background-color: #0f3c9e;
     color: white;
     border-radius: .5em;
     top: 11.5vh;
@@ -596,4 +523,256 @@ Map{
     left: 5vw;
     justify-content:center;
     margin: 0;
+}
+
+
+.speedometer span {
+	width: 100px;
+	height: 55px;
+	background: #0f3c9e;
+	position: relative;
+	color: white;
+		display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	
+}
+.speedometer span:before {
+	content: "";
+	position: absolute;
+	top: -25px;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 25px solid #0f3c9e;
+}
+.speedometer span:after {
+	content: "";
+	position: absolute;
+	bottom: -25px;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-top: 25px solid #0f3c9e;
+}
+
+
+.tachometer span {
+	width: 100px;
+	height: 55px;
+	background: #0f3c9e;
+	position: relative;
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	
+}
+.tachometer span:before {
+	content: "";
+	position: absolute;
+	top: -25px;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 25px solid #0f3c9e;
+}
+.tachometer span:after {
+	content: "";
+	position: absolute;
+	bottom: -25px;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-top: 25px solid #0f3c9e;
+}
+
+
+.lightBulb{
+    display: flex;
+    justify-content: center;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+.lightBulb1{
+    display: flex;
+    justify-content: center;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+.lightBulb1 svg {
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    color: white;
+    padding-top: 0;
+    cursor: pointer;
+    text-shadow: #f2f2f2;
+}
+
+.lightBulb svg {
+    height: 70px;
+    color:  #ffff00;
+    display: flex;
+    justify-content: center;
+    padding-top: 0;
+    cursor: pointer;
+    text-shadow: #f2f2f2;
+}
+
+
+.lightBulb svg {
+  text-align: center;
+  font-size: 7em;
+  margin: 20px 0 20px 0;
+  cursor: pointer;
+}
+
+.lightBulb svg {
+  text-decoration: none;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+  margin: 0;
+}
+
+.lightBulb:nth-child(1) svg {
+  color: #ffff00;
+  font-family: Monoton;
+  -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
+  -moz-animation: neon1 1.5s ease-in-out infinite alternate;
+  animation: neon1 1.5s ease-in-out infinite alternate;
+  margin: 0;
+
+}
+
+.lightBulb:nth-child(1) svg:hover {
+  color: #ffff00;
+  -webkit-animation: none;
+  -moz-animation: none;
+  animation: none;
+}
+
+.lightBulb:hover {
+  color: #ffffff;
+}
+
+
+.bulbCon {
+	width: 100px;
+	height: 55px;
+    background: #0f3c9e;
+	position: relative;
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	
+}
+.bulbCon:before {
+	content: "";
+	position: absolute;
+	top: -25px;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 25px solid #0f3c9e;
+}
+.bulbCon:after {
+	content: "";
+	position: absolute;
+	bottom: -25px;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-top: 25px solid #0f3c9e;
+}
+
+.timeBox{
+    display: flex;
+    width: 80vw;
+    justify-content: space-around;
+    flex-direction: row-reverse;
+}
+
+.TimeLeft{
+    text-align: center;
+    
+    
+}
+
+
+.counter{
+    text-align: center;
+}
+
+.numbers {
+    text-align: center;
+    font-size: 1.2em;
+}
+
+
+.backButton {
+    color: white !important;
+    background-color: #0f3c9e;
+    border: none;
+    border-radius: 0.2em;
+    font-size: 1em;
+    cursor: pointer;
+    padding: .5em .5em;
+    margin-bottom: .2em;
+    width: 48vw;
+    font-family: inherit;
+    position: relative;
+    top: 10vh;
+    left: 21vw
+
+}
+
+.backButton a{
+        text-decoration: none;
+        color: white;
+}
+
+.smallDesc {
+    margin: 0;
+    font-size: .5em;
+    color: #cccccc;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.checkContainer{
+    text-align: center
+}
+
+.mapButton3 {
+    text-align: center;
+}
+
+.mapButton2 {
+    text-align: center;
+}
+.mapButton1{
+    text-align: center;
+}
+
+.mapButton {
+    text-align: center
 }

@@ -5,7 +5,7 @@ import axios from 'axios';
 var Speed = React.createClass({
     getInitialState: function(){
       return {
-          kph: 15
+          kph: 0
       }
     },
             // componentDidMount: function() {
@@ -22,7 +22,7 @@ var Speed = React.createClass({
     render: function(){
         return (
             <div className= "speedometer">
-                <span>Km/h: {this.state.kph} </span>
+                <span className="numbers">Km/h<br/>{this.state.kph}</span>
             </div>
         )
     }

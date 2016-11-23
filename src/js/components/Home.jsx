@@ -10,10 +10,10 @@ var Home = React.createClass({
  connections: ["facebook", "google-oauth2"],
  icon: logo_img,
  closable: false,
- dict: {title: "EFC Board"},
+ dict: {title: ""},
  focusInput: false,
  gravatar: false,
- callbackURL: "https://ecf-board-kitchdev.c9users.io/homepage"
+ callbackURL: "https://ecf-board-kitchdev.c9users.io/homepage" 
 }
     this.props.lock.social(options);
   },

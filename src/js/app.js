@@ -10,12 +10,11 @@ var IndexRoute = ReactRouter.IndexRoute;
 var Login = require('./components/Login');
 var Home = require('./components/Home'); //more of a landing/ sign in page
 var Map = require('./components/Map');
-var Horizontal = require('./components/Horizontal') //homepage
-var Light = require('./components/Light')
-var Check = require('./components/Check')
-
+var Horizontal = require('./components/Horizontal'); //homepage
+var Light = require('./components/Light');
+var Check = require('./components/Check');
 var App = require('./components/App');
-var Landing = require('./components/Landing')
+
 
 
 /*
