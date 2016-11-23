@@ -15,9 +15,6 @@ var TimeLeft = React.createClass({
         hours: 0
       }
     },
-    // mystr = '45'
-    // pad = '0000'
-    // (pad + mystr).slice(-pad.length)
 
     tick: function() {
     this.setState({seconds: this.state.seconds + 1});
@@ -46,14 +43,13 @@ var TimeLeft = React.createClass({
     clearInterval(this.interval);
   },
     render: function(){
-        console.log(destination, "duh")
         console.log("My second length is" , this.state.seconds.toString().length > 1 ? this.state.seconds : "0" + this.state.seconds)
         return (
             <div className="timeBox">
-                <div className= "TimeLeft numbers">Trip Duration:<br/>{this.props.duration} </div>
+                <div className= "TimeLeft numbers1">Trip Duration:<br/>{this.props.duration} </div>
                 <div className="counter">
                    {React.createElement(clock, null)} <br/>
-                    <span className="numbers">{this.state.hours.toString().length > 1 ? this.state.hours : "0" + this.state.hours }:
+                    <span className="numbers1">{this.state.hours.toString().length > 1 ? this.state.hours : "0" + this.state.hours }:
                     {this.state.minutes.toString().length > 1 ? this.state.minutes : "0" + this.state.minutes }:
                     {this.state.seconds.toString().length > 1 ? this.state.seconds : "0" + this.state.seconds }</span>
                 </div>

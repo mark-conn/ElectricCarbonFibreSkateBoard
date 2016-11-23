@@ -99,14 +99,14 @@ var TripButton = React.createClass ({
         if(this.state.buttondisplay === tripStart)
         return (
             <div className="mapButton1">
-                <span className="smallDesc">Start Trip</span>
+                <span className="smallDesc">Start</span>
                 <button onClick={this._buttonClick}>{this.state.buttondisplay}</button>
             </div>
         )
         else if(this.state.buttondisplay === endTrip){
         return (
             <div className="mapButton2">
-                <span className="smallDesc">End Trip</span>
+                <span className="smallDesc">End</span>
                 <button onClick={this._buttonClick}>{this.state.buttondisplay}</button>
             </div>
             )

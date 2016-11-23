@@ -15,17 +15,22 @@ var appFunctions = require('./api-functions');
 const api = appFunctions(connection);
 app.use(morgan('dev'));
 
+
+
+
+
+
 // SPEAK TO BOARD
 
 // retreive the current rpm variable directly from board
 app.get('/rpm', function(request, response){
-    api.getCurrentRpm(function(err, result){
+    api.getCurrentRpm((err, result) => {
         if(err) console.log(err);
         else {
-            console.log(result);
-            response.end();
+            response.send(result);    
         }
     });
+
 });
 
 // retreive the currentCap variable from board, calculate into a battery percentage
@@ -33,8 +38,7 @@ app.get('/batterylevel', function(request, response){
     api.getBatteryPercent(function(err, result){
         if(err) console.log(err);
         else {
-            console.log(result);
-            response.end();
+            response.send(result);
         }
     });
 });
@@ -44,10 +48,7 @@ app.get('/currentspeed', function(request, response){
     api.getCurrentSpeed(function(err, result){
         if(err) console.log(err);
         else {
-
-            response.json(result); 
-            console.log(response);
-            response.end();
+            response.send(result);
         }
     });
 });
@@ -57,20 +58,22 @@ app.get('/powerlevel/:percent', function(request, response){
     api.setPowerLevel(request.params.percent, function(err, result){
         if(err) console.log(err);
         else {
-            console.log(result);
+           response.send(result);
         }
     });
 });
 
 // receive a TOGGLE command from UI, send this command to the board to toggle lights
-app.get('/lights/:toggle', function(request, response){
-    api.toggleLights(request.params.toggle, function(err, result){
-        if(err) console.log(err);
+app.get('/lights', function(request, response){
+
+    api.toggleLights((err, result) => {
+        if(err) console.log("lights", err);
         else {
-            console.log(result);
+            response.send(result);
         }
     });
 });
+
 
 
 // SPEAK TO INTERNAL FUNCTIONS/DATABASE
@@ -94,15 +97,7 @@ app.get('/endtrip/:currentlocation', function(request, response){
     api.endTrip(request.params.currentlocation);
 });
 
-app.get('/timechecker', function(request, response) {
-    
-    api.timeChecker(function(err, result) {
-        if(err) console.log(err);
-        else {
-        response.send(result);
-        }
-    });
-});
+
 
 
 // SPEAK TO MAPS APIS
@@ -153,6 +148,7 @@ app.get('/getresultmap/:currentlocation/:destination/:path', function(request, r
 });
 
 app.get('/path/:currentlocation/:destination', function(request, response){
+    
     fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${request.params.currentlocation}&destination=${request.params.destination}&mode=bicycling&key=AIzaSyD02qmfhm121HIuQb3JWMVQzLtuo3XzBjk`)
     .then(function(result){
         return result.json();

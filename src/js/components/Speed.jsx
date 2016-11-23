@@ -8,16 +8,16 @@ var Speed = React.createClass({
           kph: 0
       }
     },
-            // componentDidMount: function() {
-    //     var that = this;
-    //         setInterval(function(){
-    //         axios.get(`/speed`)
-    //         .then(function(result){
-    //             that.setState ({
+    //  componentDidMount: function() {
+
+    //         setInterval(() => {
+    //         axios.get(`/currentspeed`)
+    //         .then((result) => {
+    //             this.setState ({
     //                 kph: result.data
     //             });
     //         })
-    //         ,1000 });
+    //         , 5000 });
     // },
     render: function(){
         return (

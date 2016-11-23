@@ -9,7 +9,7 @@ var Home = React.createClass({
     var options = {
  connections: ["facebook", "google-oauth2"],
  icon: logo_img,
- closable: false,
+ closable: true,
  dict: {title: ""},
  focusInput: false,
  gravatar: false,
@@ -21,11 +21,15 @@ var Home = React.createClass({
 
   render: function() {
     return (
-    <div className="login-box">
-      <button className ="login-button">
-        <a className="login" onClick={this.showLock}>Sign In</a>
-      </button>
-    </div>);
+    <div className="front">
+      <span className="frontTitle">Welcome to ECF SkateBoard Controller</span>  
+      <div className="login-box">
+        <button className ="login-button">
+          <a className="login" onClick={this.showLock}>Sign In</a>
+        </button>
+      </div>
+    </div>
+    );
   }
 });
 

@@ -14,7 +14,7 @@ var problem = require('react-icons/lib/fa/thumbs-o-down')
 var Check = React.createClass({
     getInitialState: function(){
       return {
-          sysStatus: "green"
+          sysStatus: "red"
       }
     },
         // componentDidMount: function() {
@@ -50,11 +50,11 @@ var Check = React.createClass({
         }        
         else if(this.state.sysStatus === "red"){
             return (
-                <div className="warnLights">
-                    <div className="checkCircleR">
-                        {React.createElement(problem, null)}
+                    <div className="warnLights">
+                        <div className="checkCircleR">
+                            {React.createElement(problem, null)}
+                        </div>
                     </div>
-                </div>
                 )
         }
     }

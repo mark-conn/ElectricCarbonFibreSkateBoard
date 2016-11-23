@@ -25,8 +25,16 @@ var Horizontal = React.createClass({
     })
   },
   handleChange: function(value) {
+    
     this.setState({
       value: value
+    }, () => {
+      
+    axios.get(`/powerlevel/${value}`)
+    .then(function(result){
+      console.log(result.data);
+    });
+      
     });
   },
   
@@ -69,6 +77,7 @@ var Horizontal = React.createClass({
           </div>
         {/*  <div className='value'>Value: {value}</div> */}
         </div>
+        <span className="destLoc">Destination selected: <br/>{this.props.location.query.destination}</span>
         <div className="tripTimer">
         {this.state.tripStarted ? <TimeLeft duration={this.props.location.query.duration}/> : null}
         </div>

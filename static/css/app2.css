@@ -4,10 +4,9 @@ html {
 
 
 body {
-    font-family: 'Source Code Pro', monospace, Helvetica;
+    font-family: 'Nova Square', cursive;
     margin: 0;
-    color:#0f3c9e
-;
+    color:#0f3c9e;
 }
 
 
@@ -24,8 +23,7 @@ h1,h2,h3,h4,h5,h6 {
     justify-content: space-between;
     align-items: center;
     height: 4.5em;
-    border-bottom: 1px solid #0f3c9e
-;
+    border-bottom: 1px solid #0f3c9e;
     
 }
 
@@ -118,7 +116,7 @@ Map{
 }
 .rangeslider-horizontal .rangeslider__fill {
   height: 100%;
-  background: #0f3c9e;
+  background: #436280;
   border-radius: 10px;
   top: 0;
 }
@@ -151,7 +149,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgba(76, 187, 23, 0.7);
+    background-color: #a3bad2;
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -165,7 +163,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgb(76, 187, 23);
+    background-color: #a3bad2;
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -179,7 +177,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgba(255, 255, 102, 0.5);
+    background-color: #a3bad2;
 
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
@@ -194,7 +192,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgb(255, 255, 102);
+    background-color: #a3bad2;
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -208,7 +206,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgba(230, 46, 0, 0.5);
+    background-color: #a3bad2;
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -222,7 +220,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: rgb(230, 46, 0);
+    background-color: #a3bad2;
 
     font-size: .7em;
     font: 11.3333px 'Source Code Pro', monospace, Helvetica;
@@ -386,7 +384,7 @@ Map{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255,102,0, 0.7);
+    background-color:#a3bad2;
     position: relative;
     width: 55px;
     height: 55px;
@@ -403,7 +401,7 @@ Map{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255,102,0,0.7);
+    background-color:#a3bad2;
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -417,7 +415,7 @@ Map{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255,102,0,0.7);
+    background-color:#a3bad2;
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -431,7 +429,7 @@ Map{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255,102,0,0.7);
+    background-color: #a3bad2;
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -461,7 +459,7 @@ Map{
     border: none;
     width: 120px;
     height: 35px;
-    background: #0f3c9e;
+    background: #a3bad2;
     color: white;
     border-radius: .5em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
@@ -474,9 +472,9 @@ Map{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #0f3c9e;
+    background-color: #436280;
     color: white;
-    border-radius: .5em;
+    border-radius: .3em;
     top: 11.5vh;
 }
 
@@ -706,8 +704,10 @@ Map{
 .timeBox{
     display: flex;
     width: 80vw;
+    height: 12vh;
     justify-content: space-around;
     flex-direction: row-reverse;
+    align-items: center;
 }
 
 .TimeLeft{
@@ -724,6 +724,7 @@ Map{
 .numbers {
     text-align: center;
     font-size: 1.2em;
+    color: #436280;
 }
 
 
@@ -751,7 +752,7 @@ Map{
 
 .smallDesc {
     margin: 0;
-    font-size: .5em;
+    font-size: .8em;
     color: #cccccc;
     text-align: center;
     display: flex;
@@ -775,4 +776,33 @@ Map{
 
 .mapButton {
     text-align: center
+}
+
+.destLoc {
+    font-size: .8em;
+    color: #bfbfbf;
+    position: relative;
+    top: 10vh;
+    width: 80vw;
+}
+
+.numbers1 {
+    text-align: center;
+    font-size: 1.2em;
+    color: white;
+}
+
+.front{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 8vh;
+    text-align: center;
+}
+
+.frontTitle {
+    color: #436280;
+    font-size: 1em;
 }

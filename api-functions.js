@@ -17,11 +17,14 @@ var speed;
 // While in 'TRIP', speed variable is pushed to this array every time it is updated
 var speedArray = [];
 
+// BOARD VARIABLES
 var currentCap;
 var lights;
 var powerLevel;
 var rpm;
 var tripDistance;
+var pulse;
+
 
 
 // MAP/TRIP VARIABLES
@@ -31,59 +34,11 @@ var tripStartPoint;
 var tripStartingBattery;
 
 
+
 module.exports = function appAPI(connection) {
     var api = {
-    
-    //activates functions on the board to change variables
-    functionCommunicator: function(name, argument, callback) {
-        var functionName = name;
-        
-        functionName = particle.callFunction({
-            deviceId: '3d0023001647353236343033',
-            name: name.toString(),
-            argument: argument.toString(),
-            auth: '87051f1c2296c6b19fec93fe94d92961da6a8291'
-        });
-        
-        functionName.then(
-        function(data) {
-            callback(null, data);
-            
-        },
-        function(err) {
-            callback(err);
-        });
-        
-        
-    },
-    
-    //gets variables from the board
-    variableCommunicator: function(name, callback) {
-        var variableName = name;
-        
-        variableName = particle.getVariable({
-            deviceId: '3d0023001647353236343033',
-            name: name,
-            auth: '87051f1c2296c6b19fec93fe94d92961da6a8291'
-        });
-        
-        variableName.then(
-        function(data) {
-            callback(null, data);
-            
-        },
-        function(err) {
-            callback(err);
-        });
-        
-        
-    },
-    
-    // needs AUTH-O    
-    signIn: function() {},
-    
-    //works
-    setPowerLevel: function(percentage) {
+
+    setPowerLevel: function(percentage, callback) {
         
         // connect to board
         // takes percent input and 
@@ -93,65 +48,59 @@ module.exports = function appAPI(connection) {
         // fins associated current draw from said power level
         // display new RPM as 'speed limit' on UI
         
-        var minValue = 1700;
-        var maxValue = 2100;
-        var pulse = (percentage * (maxValue - minValue))/100 + minValue;
-        api.functionCommunicator('limiter', pulse);
+        var minValue = 1000;
+        var maxValue = 2000;
+        pulse = (percentage * (maxValue - minValue))/100 + minValue;
+        
+        fetch(`http://192.168.0.210/${pulse}`).then((result) => {
+            return result.json();
+        }).then((json) => {
+            callback(null, json);
+        });
+            
         
     },
     
-    //works
-    toggleLights: function(toggle, callback) {
-        
-        // connect to board
-        // send 'toggle' parameter of on or off
-        // triggers board function for lights
-        // current lights variable
-        lights = toggle;
-        api.functionCommunicator('lightsToggle', toggle);
+    //UP TO DATE
+    toggleLights: function(callback) {
 
+      fetch('http://192.168.0.210/lights').then((result) => {
+
+        return result.json();  
+          
+      }).then((json) => {
+
+          lights = parseInt(json.lights);
+          callback(null, lights);
+          
+      });
+        
     },
     
-    //works
+    //UP TO DATE
     getCurrentSpeed: function(callback) {
         
-        // connect to board
-        // request/recieve RPM
-        // use RPM to calculate speed
-        // current speed variable
-        // push existing speed to array
-        // display new speed to UI
-        
-        api.variableCommunicator('rpm', function(err, result){
-            if(err) console.log(err);
-            else {
-                
-               result = result.body.result;
-               speed = result * wheelCircumference;
+       speed = rpm * wheelCircumference;
+       callback(null,speed);
                
-               if(trip) speedArray.push({speed: speed, time: Date.now()});
-               callback(null, speed);
-            }
-        });
-        
     },
     
-    //works
+    //UP TO DATE
     getCurrentRpm: function(callback) {
         
-        api.variableCommunicator('rpm', function(err, result){
-            if(err) console.log(err);
-            else {
-                
-                result = result.body.result;
-                callback(null, result);
-                
-            }
+        fetch('http://192.168.0.210/rpm').then((result) => {
+            return result.json();
+            
+        }).then((json) => {
+            
+            rpm = parseInt(json.rpm);
+            callback(null, rpm);
+            
         });
         
     },
     
-    //works
+    //UP TO DATE
     getBatteryPercent: function(callback) {
         
         // connect to board
@@ -160,25 +109,44 @@ module.exports = function appAPI(connection) {
         // push existing battery percent to array
         // display new percent to UI
         
-        api.variableCommunicator('currentCap', function(err, result){
-           if(err) callback(err);
-           else {
-               
-               currentCap = battery - result.body.result;
+        fetch('http://192.168.0.210/').then((result) => {
+            return result.json();
+        }).then((json) => {
+            
+               currentCap = battery - parseInt(json['current']);
                batteryPercent = Math.round((1 - (currentCap/battery)) * 100);
-               
-               if(trip) batteryArray.push({batteryPercent: batteryPercent, time: Date.now()});
                callback(null, batteryPercent);
-           }
         });
-        
     },
     
-    
+
     //TRIP FUNCTIONS
     
+    //UP TO DATE -----> PERKS EDIT THEO VARIABLES
     tripChecker: function(location, distance, duration, callback) {
-        console.log("in function");
+        
+        var theoRpm;
+        var theoCurrent;
+        
+            // var durationArray = duration.split(' ');
+            // function cleanDuration(arr) {
+            // return arr.filter((word) => {
+            //   return word.length > 2 ? null : word;
+            // });
+            // }
+            // duration = cleanDuration(durationArray);
+            // duration.join(' ');
+            // var minutes = duration.length > 1 ? duration[1] : duration[0];
+            // var hours = duration.length > 1 ? duration[0] : 0;
+            // hours = parseInt(hours);
+            // minutes = parseInt(minutes);
+            // minutes = minutes / 12;
+            // var time = hours + minutes;
+        
+        
+        var distanceArray = distance.split(' ');
+        distance = distanceArray[0];
+
         currentLocation = location;
         // current power level variable
             powerLevel;
@@ -190,16 +158,14 @@ module.exports = function appAPI(connection) {
             batteryPercent;
         
         // distance/RPM = hours to complete trip
-        var hours = tripDistance / rpm
+        theoRpm = 'wait out'
+        theoCurrent = 'wait out'
         
-        // current draw * hours = capacity trip(amp/hours)
-        var capacityTrip = 
-        // capacity trip/ current cap
-            // if / else enough power, display
-            // good --> api.startTrip();
-            // bad say "try turning lights off or lower power level"
-            // 
-        callback(null, "Green")
+        var hours = tripDistance / theoRpm;
+        var tripCapacity = hours * theoCurrent;
+        var tripCheckerResult = tripCapacity > currentCap ? "red" : tripCapacity = currentCap ? "yellow" : "green";
+        
+        callback(null, tripCheckerResult);
     },
     
     startTrip: function(location) {
@@ -246,7 +212,8 @@ module.exports = function appAPI(connection) {
         var powerUsage = tripStartingBattery - tripEndingBattery;
         
         // distance from Google Map API
-        tripDistance;
+       var distance = tripDistance;
+        
         
         connection.query(
             `INSERT INTO trips(
@@ -272,12 +239,6 @@ module.exports = function appAPI(connection) {
         });
     },
     
-    timeChecker: function(callback) {
-        var time = Date.now();
-        var timeLeft = time - tripStartTime;
-        callback(null, timeLeft);
-        
-    }
     
     };
     

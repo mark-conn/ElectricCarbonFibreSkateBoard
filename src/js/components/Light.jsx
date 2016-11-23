@@ -1,5 +1,5 @@
 var React = require('react');
-
+import axios from 'axios';
 
 var falightBulb = require('react-icons/lib/fa/lightbulb-o');
 
@@ -10,11 +10,14 @@ var Light = React.createClass({
       }  
     },
     handleChange: function(){
-        return (
+        
+        axios.get(`/lights`)
+        .then( (result) => {
             this.setState({
                 lightOn: !this.state.lightOn
-            })
-            )
+            });
+            
+        });
     },
     render: function(){
       if(this.state.lightOn === true){

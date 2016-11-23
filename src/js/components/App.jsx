@@ -25,15 +25,17 @@ var App = React.createClass({
             }
         },
     // componentDidMount: function() {
-    //     var that = this;
-    //         setInterval(function(){
-    //         axios.get(`getBatteryPercent`)
-    //         .then(function(result){
-    //             that.setState ({
+
+    //         setInterval(() => {
+                
+    //         axios.get(`/batterylevel`)
+    //         .then((result) =>{
+                
+    //             this.setState ({
     //                 battPow: result.data
     //             });
     //         })
-    //         ,10000 });
+    //         ,600000 });
     // },
 
     render: function() {

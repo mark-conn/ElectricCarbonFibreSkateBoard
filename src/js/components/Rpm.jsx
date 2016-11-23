@@ -8,16 +8,16 @@ var Revs = React.createClass({
         Rpm: 0
       }
     },
-            // componentDidMount: function() {
-    //     var that = this;
-    //         setInterval(function(){
-    //         axios.get(`/speed`)
-    //         .then(function(result){
-    //             that.setState ({
+    // componentDidMount: function() {
+        
+    //     setInterval(() => {
+    //         axios.get(`/rpm`)
+    //         .then((result) => {
+    //             this.setState ({
     //                 Rpm: result.data
     //             });
     //         })
-    //         ,10000 });
+    //         ,1000 });
     // },
     render: function(){
         return (
