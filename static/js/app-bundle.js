@@ -59,9 +59,9 @@
 	var Home = __webpack_require__(518); //more of a landing/ sign in page
 	var Map = __webpack_require__(520);
 	var Horizontal = __webpack_require__(546); //homepage
-	var Light = __webpack_require__(556);
-	var Check = __webpack_require__(551);
-	var App = __webpack_require__(567);
+	var Light = __webpack_require__(559);
+	var Check = __webpack_require__(554);
+	var App = __webpack_require__(570);
 	
 	/*
 	Rendering a router will output the right component tree based on the current URL.
@@ -65092,7 +65092,7 @@
 	    var options = {
 	      connections: ["facebook", "google-oauth2"],
 	      icon: logo_img,
-	      closable: true,
+	      closable: false,
 	      dict: { title: "" },
 	      focusInput: false,
 	      gravatar: false,
@@ -66824,14 +66824,16 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _throttleDebounce = __webpack_require__(551);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Check = __webpack_require__(551);
-	var Light = __webpack_require__(556);
-	var Speed = __webpack_require__(558);
-	var Rpm = __webpack_require__(559);
-	var TripButton = __webpack_require__(560);
-	var TimeLeft = __webpack_require__(565);
+	var Check = __webpack_require__(554);
+	var Light = __webpack_require__(559);
+	var Speed = __webpack_require__(561);
+	var Rpm = __webpack_require__(562);
+	var TripButton = __webpack_require__(563);
+	var TimeLeft = __webpack_require__(568);
 	
 	var Horizontal = _react2.default.createClass({
 	  displayName: 'Horizontal',
@@ -66839,7 +66841,8 @@
 	  getInitialState: function getInitialState() {
 	    return this.state = {
 	      value: 0, /** Start value **/
-	      tripStarted: false
+	      tripStarted: false,
+	      checkStatus: ''
 	    };
 	  },
 	  _handleChangeState: function _handleChangeState(event) {
@@ -66852,19 +66855,31 @@
 	
 	    this.setState({
 	      value: value
-	    }, function () {
-	
-	      _axios2.default.get('/powerlevel/' + value).then(function (result) {
-	        console.log(result.data);
-	      });
 	    });
+	    this.ajaxCall(value);
+	  },
+	  ajaxCall: function ajaxCall(value) {
+	    _axios2.default.get('/powerlevel/' + value).then(function (result) {
+	      console.log(result.data);
+	      console.log("firing here");
+	    });
+	  },
+	
+	  handleChildFunc: function handleChildFunc(input) {
+	    console.log(input);
+	    this.setState({
+	      checkStatus: input
+	    });
+	  },
+	  componentWillMount: function componentWillMount() {
+	
+	    this.ajaxCall = (0, _throttleDebounce.debounce)(1000, this.ajaxCall);
 	  },
 	
 	  render: function render() {
 	    console.log(this.state.tripStarted);
 	    var value = this.state.value;
 	
-	    console.log(this.props);
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'uiLayout' },
@@ -66879,7 +66894,7 @@
 	            { className: 'smallDesc' },
 	            'Status'
 	          ),
-	          _react2.default.createElement(Check, null)
+	          _react2.default.createElement(Check, { myProps: this.state.checkStatus })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -66889,7 +66904,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'tripContainer' },
-	          _react2.default.createElement(TripButton, { data: this.props.location.query, onClick: this._handleChangeState, tripStarted: this.state.tripStarted })
+	          _react2.default.createElement(TripButton, { changeCheckStatus: this.handleChildFunc.bind(this), data: this.props.location.query, onClick: this._handleChangeState, tripStarted: this.state.tripStarted })
 	        )
 	      ),
 	      _react2.default.createElement(
@@ -67364,6 +67379,143 @@
 /* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var throttle = __webpack_require__(552);
+	var debounce = __webpack_require__(553);
+	
+	module.exports = {
+		throttle: throttle,
+		debounce: debounce
+	};
+
+
+/***/ },
+/* 552 */
+/***/ function(module, exports) {
+
+	/* eslint-disable no-undefined,no-param-reassign,no-shadow */
+	
+	/**
+	 * Throttle execution of a function. Especially useful for rate limiting
+	 * execution of handlers on events like resize and scroll.
+	 *
+	 * @param  {Number}    delay          A zero-or-greater delay in milliseconds. For event callbacks, values around 100 or 250 (or even higher) are most useful.
+	 * @param  {Boolean}   noTrailing     Optional, defaults to false. If noTrailing is true, callback will only execute every `delay` milliseconds while the
+	 *                                    throttled-function is being called. If noTrailing is false or unspecified, callback will be executed one final time
+	 *                                    after the last throttled-function call. (After the throttled-function has not been called for `delay` milliseconds,
+	 *                                    the internal counter is reset)
+	 * @param  {Function}  callback       A function to be executed after delay milliseconds. The `this` context and all arguments are passed through, as-is,
+	 *                                    to `callback` when the throttled-function is executed.
+	 * @param  {Boolean}   debounceMode   If `debounceMode` is true (at begin), schedule `clear` to execute after `delay` ms. If `debounceMode` is false (at end),
+	 *                                    schedule `callback` to execute after `delay` ms.
+	 *
+	 * @return {Function}  A new, throttled, function.
+	 */
+	module.exports = function ( delay, noTrailing, callback, debounceMode ) {
+	
+		// After wrapper has stopped being called, this timeout ensures that
+		// `callback` is executed at the proper times in `throttle` and `end`
+		// debounce modes.
+		var timeoutID;
+	
+		// Keep track of the last time `callback` was executed.
+		var lastExec = 0;
+	
+		// `noTrailing` defaults to falsy.
+		if ( typeof noTrailing !== 'boolean' ) {
+			debounceMode = callback;
+			callback = noTrailing;
+			noTrailing = undefined;
+		}
+	
+		// The `wrapper` function encapsulates all of the throttling / debouncing
+		// functionality and when executed will limit the rate at which `callback`
+		// is executed.
+		function wrapper () {
+	
+			var self = this;
+			var elapsed = Number(new Date()) - lastExec;
+			var args = arguments;
+	
+			// Execute `callback` and update the `lastExec` timestamp.
+			function exec () {
+				lastExec = Number(new Date());
+				callback.apply(self, args);
+			}
+	
+			// If `debounceMode` is true (at begin) this is used to clear the flag
+			// to allow future `callback` executions.
+			function clear () {
+				timeoutID = undefined;
+			}
+	
+			if ( debounceMode && !timeoutID ) {
+				// Since `wrapper` is being called for the first time and
+				// `debounceMode` is true (at begin), execute `callback`.
+				exec();
+			}
+	
+			// Clear any existing timeout.
+			if ( timeoutID ) {
+				clearTimeout(timeoutID);
+			}
+	
+			if ( debounceMode === undefined && elapsed > delay ) {
+				// In throttle mode, if `delay` time has been exceeded, execute
+				// `callback`.
+				exec();
+	
+			} else if ( noTrailing !== true ) {
+				// In trailing throttle mode, since `delay` time has not been
+				// exceeded, schedule `callback` to execute `delay` ms after most
+				// recent execution.
+				//
+				// If `debounceMode` is true (at begin), schedule `clear` to execute
+				// after `delay` ms.
+				//
+				// If `debounceMode` is false (at end), schedule `callback` to
+				// execute after `delay` ms.
+				timeoutID = setTimeout(debounceMode ? clear : exec, debounceMode === undefined ? delay - elapsed : delay);
+			}
+	
+		}
+	
+		// Return the wrapper function.
+		return wrapper;
+	
+	};
+
+
+/***/ },
+/* 553 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* eslint-disable no-undefined */
+	
+	var throttle = __webpack_require__(552);
+	
+	/**
+	 * Debounce execution of a function. Debouncing, unlike throttling,
+	 * guarantees that a function is only executed a single time, either at the
+	 * very beginning of a series of calls, or at the very end.
+	 *
+	 * @param  {Number}   delay         A zero-or-greater delay in milliseconds. For event callbacks, values around 100 or 250 (or even higher) are most useful.
+	 * @param  {Boolean}  atBegin       Optional, defaults to false. If atBegin is false or unspecified, callback will only be executed `delay` milliseconds
+	 *                                  after the last debounced-function call. If atBegin is true, callback will be executed only at the first debounced-function call.
+	 *                                  (After the throttled-function has not been called for `delay` milliseconds, the internal counter is reset).
+	 * @param  {Function} callback      A function to be executed after delay milliseconds. The `this` context and all arguments are passed through, as-is,
+	 *                                  to `callback` when the debounced-function is executed.
+	 *
+	 * @return {Function} A new, debounced function.
+	 */
+	module.exports = function ( delay, atBegin, callback ) {
+		return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
+	};
+
+
+/***/ },
+/* 554 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	var _axios = __webpack_require__(521);
@@ -67373,35 +67525,43 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var React = __webpack_require__(1);
+	var Horizontal = __webpack_require__(546);
+	
 	
 	/* this component is meant to check the general status of the boards internal functions, 
 	whether it's hardwear, server or app - depicting a GREEN YELLOW OR RED circle. */
-	var check = __webpack_require__(552);
-	var warning = __webpack_require__(554);
-	var problem = __webpack_require__(555);
+	var check = __webpack_require__(555);
+	var warning = __webpack_require__(557);
+	var problem = __webpack_require__(558);
 	
 	var Check = React.createClass({
 	    displayName: 'Check',
 	
+	
 	    getInitialState: function getInitialState() {
 	        return {
-	            sysStatus: "red"
+	            sysStatus: this.props.myProps
 	        };
 	    },
-	    // componentDidMount: function() {
-	    //     var that = this;
-	    //         setInterval(function(){
-	    //         axios.get(`/check`)
-	    //         .then(function(result){
-	    //             that.setState ({
-	    //                 sysStatus: result.data
-	    //             });
-	    //         })
-	    //         ,10000 });
-	    // },
 	
 	    render: function render() {
-	        if (this.state.sysStatus === "green") {
+	        console.log("here in check", this.props.myProps);
+	
+	        if (!this.props.myProps) {
+	            return React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                    'div',
+	                    { className: 'warnLights' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'checkCircle0' },
+	                        React.createElement(check, null)
+	                    )
+	                )
+	            );
+	        } else if (this.props.myProps === "green") {
 	            return React.createElement(
 	                'div',
 	                { className: 'warnLights' },
@@ -67411,7 +67571,7 @@
 	                    React.createElement(check, null)
 	                )
 	            );
-	        } else if (this.state.sysStatus === "yellow") {
+	        } else if (this.props.myProps === "yellow") {
 	            return React.createElement(
 	                'div',
 	                { className: 'warnLights' },
@@ -67421,7 +67581,7 @@
 	                    React.createElement(warning, null)
 	                )
 	            );
-	        } else if (this.state.sysStatus === "red") {
+	        } else if (this.props.myProps === "red") {
 	            return React.createElement(
 	                'div',
 	                { className: 'warnLights' },
@@ -67438,7 +67598,7 @@
 	module.exports = Check;
 
 /***/ },
-/* 552 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67458,7 +67618,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaCheck = function (_React$Component) {
 	    _inherits(FaCheck, _React$Component);
@@ -67491,7 +67651,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 553 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67550,7 +67710,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 554 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67570,7 +67730,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaExclamationTriangle = function (_React$Component) {
 	    _inherits(FaExclamationTriangle, _React$Component);
@@ -67603,7 +67763,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 555 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67623,7 +67783,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaThumbsODown = function (_React$Component) {
 	    _inherits(FaThumbsODown, _React$Component);
@@ -67656,7 +67816,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 556 */
+/* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67670,7 +67830,7 @@
 	var React = __webpack_require__(1);
 	
 	
-	var falightBulb = __webpack_require__(557);
+	var falightBulb = __webpack_require__(560);
 	
 	var Light = React.createClass({
 	    displayName: 'Light',
@@ -67735,7 +67895,7 @@
 	module.exports = Light;
 
 /***/ },
-/* 557 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67755,7 +67915,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaLightbulbO = function (_React$Component) {
 	    _inherits(FaLightbulbO, _React$Component);
@@ -67788,7 +67948,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 558 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67839,7 +67999,7 @@
 	module.exports = Speed;
 
 /***/ },
-/* 559 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67892,7 +68052,7 @@
 	module.exports = Revs;
 
 /***/ },
-/* 560 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67901,10 +68061,11 @@
 	var history = __webpack_require__(175).browserHistory;
 	var axios = __webpack_require__(521);
 	var Map = __webpack_require__(520);
-	var maps = __webpack_require__(561);
-	var load = __webpack_require__(562);
-	var start = __webpack_require__(563);
-	var done = __webpack_require__(564);
+	var Check = __webpack_require__(554);
+	var maps = __webpack_require__(564);
+	var load = __webpack_require__(565);
+	var start = __webpack_require__(566);
+	var done = __webpack_require__(567);
 	
 	var newTrip = React.createElement(maps, null);
 	var check = React.createElement(load, null);
@@ -67914,6 +68075,12 @@
 	var TripButton = React.createClass({
 	    displayName: 'TripButton',
 	
+	
+	    propTypes: {
+	
+	        changeCheckStatus: React.PropTypes.func
+	
+	    },
 	
 	    getInitialState: function getInitialState() {
 	        return {
@@ -67959,6 +68126,7 @@
 	
 	            axios.get('/checktrip/' + this.state.currentlocation + '/' + this.state.distance + '/' + this.state.duration).then(function (result) {
 	
+	                _this.props.changeCheckStatus(result.data);
 	                _this.setState({
 	                    checkTripReading: result.data,
 	                    buttondisplay: tripStart
@@ -67977,6 +68145,7 @@
 	                });
 	            });
 	        } else if (this.state.buttondisplay === endTrip) {
+	            this.props.changeCheckStatus(null);
 	            this.setState({
 	                tripEnded: true,
 	                buttondisplay: newTrip
@@ -68052,7 +68221,7 @@
 	module.exports = TripButton;
 
 /***/ },
-/* 561 */
+/* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68072,7 +68241,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var IoIosNavigate = function (_React$Component) {
 	    _inherits(IoIosNavigate, _React$Component);
@@ -68105,7 +68274,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 562 */
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68125,7 +68294,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var IoWrench = function (_React$Component) {
 	    _inherits(IoWrench, _React$Component);
@@ -68158,7 +68327,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 563 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68178,7 +68347,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaPlayCircleO = function (_React$Component) {
 	    _inherits(FaPlayCircleO, _React$Component);
@@ -68211,7 +68380,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 564 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68231,7 +68400,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaFlagCheckered = function (_React$Component) {
 	    _inherits(FaFlagCheckered, _React$Component);
@@ -68264,7 +68433,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 565 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68277,7 +68446,7 @@
 	
 	var React = __webpack_require__(1);
 	
-	var clock = __webpack_require__(566);
+	var clock = __webpack_require__(569);
 	
 	var TimeLeft = React.createClass({
 	    displayName: 'TimeLeft',
@@ -68360,7 +68529,7 @@
 	module.exports = TimeLeft;
 
 /***/ },
-/* 566 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68380,7 +68549,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaClockO = function (_React$Component) {
 	    _inherits(FaClockO, _React$Component);
@@ -68413,7 +68582,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 567 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68436,11 +68605,11 @@
 	var Link = __webpack_require__(175).Link;
 	
 	
-	var FaBat4 = __webpack_require__(568);
-	var FaBat3 = __webpack_require__(569);
-	var FaBat2 = __webpack_require__(570);
-	var FaBat1 = __webpack_require__(571);
-	var FaBat0 = __webpack_require__(572);
+	var FaBat4 = __webpack_require__(571);
+	var FaBat3 = __webpack_require__(572);
+	var FaBat2 = __webpack_require__(573);
+	var FaBat1 = __webpack_require__(574);
+	var FaBat0 = __webpack_require__(575);
 	
 	var logo_img = __webpack_require__(519);
 	/*
@@ -68455,7 +68624,7 @@
 	
 	    getInitialState: function getInitialState() {
 	        return {
-	            battPow: 0
+	            battPow: 87
 	        };
 	    },
 	    // componentDidMount: function() {
@@ -68630,7 +68799,7 @@
 	module.exports = App;
 
 /***/ },
-/* 568 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68650,7 +68819,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaBattery4 = function (_React$Component) {
 	    _inherits(FaBattery4, _React$Component);
@@ -68683,7 +68852,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 569 */
+/* 572 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68703,7 +68872,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaBattery3 = function (_React$Component) {
 	    _inherits(FaBattery3, _React$Component);
@@ -68736,7 +68905,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 570 */
+/* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68756,7 +68925,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaBattery2 = function (_React$Component) {
 	    _inherits(FaBattery2, _React$Component);
@@ -68789,7 +68958,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 571 */
+/* 574 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68809,7 +68978,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaBattery1 = function (_React$Component) {
 	    _inherits(FaBattery1, _React$Component);
@@ -68842,7 +69011,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 572 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68862,7 +69031,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(1);
-	var IconBase = __webpack_require__(553);
+	var IconBase = __webpack_require__(556);
 	
 	var FaBattery0 = function (_React$Component) {
 	    _inherits(FaBattery0, _React$Component);

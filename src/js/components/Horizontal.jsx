@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Slider from 'react-rangeslider';
 import axios from 'axios';
+import {debounce} from 'throttle-debounce';
 
 var Check = require('./Check')
 var Light = require('./Light')
@@ -14,7 +15,8 @@ var Horizontal = React.createClass({
     return (
     this.state = {
       value: 0, /** Start value **/
-      tripStarted: false
+      tripStarted: false,
+      checkStatus: ''
       }
     )
   },
@@ -28,20 +30,36 @@ var Horizontal = React.createClass({
     
     this.setState({
       value: value
-    }, () => {
-      
+    })
+    this.ajaxCall(value)
+
+  },
+  ajaxCall: function(value){
     axios.get(`/powerlevel/${value}`)
     .then(function(result){
       console.log(result.data);
+      console.log("firing here")
+      })
+    
+  },
+  
+  handleChildFunc: function(input) {
+    console.log(input);
+    this.setState({
+      checkStatus: input
     });
-      
-    });
+    
+  },
+  componentWillMount: function(){
+    
+    this.ajaxCall = debounce(1000, this.ajaxCall);
+    
+    
   },
   
   render() {
     console.log(this.state.tripStarted)
     let { value } = this.state;
-    console.log(this.props)
     return (
       
       
@@ -50,13 +68,13 @@ var Horizontal = React.createClass({
         <div className="topDisp">
           <div className="checkContainer">
             <span className="smallDesc">Status</span>
-            <Check/>
+            <Check myProps={this.state.checkStatus}/>
           </div>
           <div className="bulbCon">
             <Light/>
           </div>
           <div  className= "tripContainer">
-            <TripButton data={this.props.location.query} onClick={this._handleChangeState} tripStarted={this.state.tripStarted}/>
+            <TripButton changeCheckStatus={this.handleChildFunc.bind(this)} data={this.props.location.query} onClick={this._handleChangeState} tripStarted={this.state.tripStarted}/>
           </div>
         </div>
         
@@ -73,7 +91,7 @@ var Horizontal = React.createClass({
               max={100}
               value={value}
               onChange={this.handleChange}
-            />
+              />
           </div>
         {/*  <div className='value'>Value: {value}</div> */}
         </div>

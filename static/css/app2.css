@@ -116,7 +116,7 @@ Map{
 }
 .rangeslider-horizontal .rangeslider__fill {
   height: 100%;
-  background: #436280;
+  background: #ff5c33;
   border-radius: 10px;
   top: 0;
 }
@@ -140,7 +140,7 @@ Map{
 /*    color: yellow;*/
 /*}*/
 
-.checkCircleG {
+.checkCircle0 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,6 +150,21 @@ Map{
     font-weight: bold;
     border-radius: 50%;
     background-color: #a3bad2;
+    font-size: .7em;
+    opacity: 0.25;
+    font: 13.3333px 'Source Code Pro', monospace, Helvetica;
+}
+
+.checkCircleG {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 55px;
+    height: 55px;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    background-color: #70db70;
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -163,7 +178,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: #a3bad2;
+    background-color: #70db70;
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -177,7 +192,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: #a3bad2;
+    background-color: #ffff66;
 
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
@@ -192,7 +207,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: #a3bad2;
+    background-color: #ffff66;
     font-size: .7em;
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
@@ -207,7 +222,7 @@ Map{
     font-weight: bold;
     border-radius: 50%;
     background-color: #a3bad2;
-    font-size: .7em;
+    font-size: .7em;#ff3300
     font: 13.3333px 'Source Code Pro', monospace, Helvetica;
 }
 
@@ -220,7 +235,7 @@ Map{
     color: white;
     font-weight: bold;
     border-radius: 50%;
-    background-color: #a3bad2;
+    background-color: #ff3300;
 
     font-size: .7em;
     font: 11.3333px 'Source Code Pro', monospace, Helvetica;
@@ -235,7 +250,7 @@ Map{
     top: 5vh;
 }
 
-.warnLights {
+.rnLights {
     display: flex;
     width: 55px;
     justify-content: flex-end;

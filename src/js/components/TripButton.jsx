@@ -2,6 +2,7 @@ var React = require('react');
 var history = require('react-router').browserHistory;
 var axios = require('axios');
 var Map = require('./Map');
+var Check = require('./Check');
 var maps = require('react-icons/lib/io/ios-navigate')
 var load = require('react-icons/lib/io/wrench')
 var start = require('react-icons/lib/fa/play-circle-o')
@@ -15,6 +16,12 @@ var endTrip = React.createElement(done, null)
 
 
 var TripButton = React.createClass ({
+    
+    propTypes: {
+      
+      changeCheckStatus: React.PropTypes.func,
+        
+    },
 
     getInitialState: function() {
         return {
@@ -61,7 +68,8 @@ var TripButton = React.createClass ({
 
            axios.get(`/checktrip/${this.state.currentlocation}/${this.state.distance}/${this.state.duration}`)
            .then((result) => {
-
+               
+               this.props.changeCheckStatus(result.data);
                this.setState({
                    checkTripReading: result.data,
                    buttondisplay: tripStart
@@ -86,6 +94,7 @@ var TripButton = React.createClass ({
             });
         }
          else if(this.state.buttondisplay === endTrip) {
+             this.props.changeCheckStatus(null);
             this.setState({
                 tripEnded: true,
                 buttondisplay: newTrip

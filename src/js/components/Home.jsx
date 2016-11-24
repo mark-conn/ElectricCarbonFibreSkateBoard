@@ -9,7 +9,7 @@ var Home = React.createClass({
     var options = {
  connections: ["facebook", "google-oauth2"],
  icon: logo_img,
- closable: true,
+ closable: false,
  dict: {title: ""},
  focusInput: false,
  gravatar: false,

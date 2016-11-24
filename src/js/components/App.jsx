@@ -21,7 +21,7 @@ If the URL is /user/:username then the User component will be displayed.
 var App = React.createClass({
         getInitialState: function(){
         return {
-            battPow: 0
+            battPow: 87
             }
         },
     // componentDidMount: function() {

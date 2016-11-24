@@ -1,5 +1,5 @@
 var React = require("react");
-
+var Horizontal = require('./Horizontal');
 import axios from 'axios';
 
 
@@ -12,25 +12,32 @@ var problem = require('react-icons/lib/fa/thumbs-o-down')
 
 
 var Check = React.createClass({
+    
+    
     getInitialState: function(){
       return {
-          sysStatus: "red"
-      }
+          sysStatus: this.props.myProps
+      };
     },
-        // componentDidMount: function() {
-    //     var that = this;
-    //         setInterval(function(){
-    //         axios.get(`/check`)
-    //         .then(function(result){
-    //             that.setState ({
-    //                 sysStatus: result.data
-    //             });
-    //         })
-    //         ,10000 });
-    // },
+
+
     
     render: function(){
-        if(this.state.sysStatus === "green"){
+        console.log("here in check", this.props.myProps);
+        
+        
+        if(!this.props.myProps) { return (
+        <div>
+            <div  className="warnLights">
+               <div className="checkCircle0">
+                   {React.createElement(check, null)}
+                </div>
+            </div>
+        </div> 
+            )
+        }
+        
+        else if(this.props.myProps === "green"){
             return (
             <div  className="warnLights">
                <div className="checkCircleG">
@@ -39,7 +46,7 @@ var Check = React.createClass({
             </div>
                 )
         }
-        else if(this.state.sysStatus === "yellow"){
+        else if(this.props.myProps === "yellow"){
             return (
                 <div className="warnLights">
                     <div className="checkCircleY">
@@ -48,14 +55,14 @@ var Check = React.createClass({
                 </div>
                 )
         }        
-        else if(this.state.sysStatus === "red"){
+        else if(this.props.myProps === "red"){
             return (
                     <div className="warnLights">
                         <div className="checkCircleR">
                             {React.createElement(problem, null)}
                         </div>
                     </div>
-                )
+                ) 
         }
     }
 });
