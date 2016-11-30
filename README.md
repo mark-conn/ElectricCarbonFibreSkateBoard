@@ -55,7 +55,7 @@ Meanwhile, the back-end member began building the map interface.  Due to the sco
 The front-end member finished the Auth-0 implementation and began work on the main interface which would combine several React components which would connect to our server including: battery, lights button, trip check/start/end button, rpm tachometer, speed tachometer, trip check status, power level slider and distance matrix.
 
 
-PHASE 3) Completion
+#PHASE 3) Completion
 
 The second week and completion of the app was characterized by overcoming literally every possible hardware issue.  Once we realized we needed to use Arduino, the next challenge was implementing a WIFI shield to allow connectivity.  We purchased the ESP8266 shield, began implementing, but then after exhaustive tests realized that we were missing the logic converter for the motor and would not have time to implement this.  We then had to switch to the CC3000 shield which required us to solder our own pins.  Eventually we got this working, only to discover that for security purposes, we could not connect to the Arduino through existing Wifi networks, but that we would need to create our own LAN.
 
